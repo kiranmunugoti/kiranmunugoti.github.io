@@ -1,1 +1,534 @@
-"Hello World" 
+<!DOCTYPE html>
+<html lang="en" ng-app="portfolioApp">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sai Kiran Munugoti — Data Scientist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink: #0f0f0f;
+      --paper: #f8f6f1;
+      --muted: #8a8580;
+      --accent: #c9541f;
+      --line: #e2ded8;
+      --code-bg: #eeebe4;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--paper); color: var(--ink); font-family: 'DM Sans', sans-serif; font-weight: 300; line-height: 1.7; overflow-x: hidden; }
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 4rem; background: rgba(248,246,241,0.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); transition: box-shadow 0.3s; }
+    nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.07); }
+    .nav-logo { font-family: 'DM Mono', monospace; font-size: 0.8rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--muted); text-decoration: none; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s; position: relative; padding-bottom: 3px; }
+    .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform 0.25s; }
+    .nav-links a:hover, .nav-links a.nav-active { color: var(--ink); }
+    .nav-links a:hover::after, .nav-links a.nav-active::after { transform: scaleX(1); }
+
+    /* LAYOUT */
+    .section-inner { max-width: 1100px; margin: 0 auto; padding: 7rem 4rem; }
+    .divider { border: none; border-top: 1px solid var(--line); max-width: 1100px; margin: 0 auto; }
+
+    /* HERO */
+    #hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; position: relative; }
+    .hero-inner { max-width: 1100px; margin: 0 auto; padding: 8rem 4rem 6rem; }
+    .hero-label { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--accent); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.8s ease 0.2s forwards; }
+    h1 { font-family: 'DM Serif Display', serif; font-size: clamp(3.5rem, 8vw, 7rem); line-height: 1.0; letter-spacing: -0.02em; color: var(--ink); opacity: 0; animation: fadeUp 0.8s ease 0.4s forwards; }
+    h1 em { font-style: italic; color: var(--accent); }
+    .hero-sub { max-width: 520px; margin-top: 2rem; font-size: 1.05rem; color: var(--muted); opacity: 0; animation: fadeUp 0.8s ease 0.6s forwards; }
+    .hero-cta { margin-top: 3rem; display: flex; gap: 1.5rem; align-items: center; opacity: 0; animation: fadeUp 0.8s ease 0.8s forwards; }
+    .btn-primary { display: inline-block; padding: 0.85rem 2rem; background: var(--ink); color: var(--paper); font-family: 'DM Mono', monospace; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; transition: background 0.2s; border: none; cursor: pointer; }
+    .btn-primary:hover { background: var(--accent); }
+    .btn-ghost { font-family: 'DM Mono', monospace; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--line); padding-bottom: 2px; transition: color 0.2s, border-color 0.2s; background: none; cursor: pointer; }
+    .btn-ghost:hover { color: var(--ink); border-color: var(--ink); }
+    .hero-bg-text { position: absolute; right: 5rem; bottom: 20rem; font-family: 'DM Serif Display', serif; font-size: 18rem; color: var(--line); line-height: 1; user-select: none; pointer-events: none; opacity: 0; animation: fadeUp 1s ease 1s forwards; }
+
+    /* ABOUT */
+    .about-grid { display: grid; grid-template-columns: 1fr 1.6fr; gap: 5rem; align-items: start; }
+    .section-label { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--accent); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1rem; }
+    h2 { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 4vw, 2.8rem); line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+    .about-text p { color: var(--muted); font-size: 1rem; margin-bottom: 1rem; }
+    .about-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--line); }
+    .stat-value { font-family: 'DM Serif Display', serif; font-size: 2.8rem; color: var(--ink); line-height: 1; }
+    .stat-label { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 0.3rem; }
+    .about-left { position: sticky; top: 8rem; }
+    .avatar-box { width: 100%; aspect-ratio: 3/4; background: var(--code-bg); border: 1px solid var(--line); overflow: hidden; }
+    .avatar-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    /* PROJECTS */
+    .projects-header { margin-bottom: 2rem; }
+    .filter-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2.5rem; align-items: center; }
+    .filter-label { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-right: 0.25rem; }
+    .filter-btn { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.35rem 0.9rem; border: 1px solid var(--line); background: transparent; color: var(--muted); cursor: pointer; transition: all 0.2s; }
+    .filter-btn:hover { border-color: var(--ink); color: var(--ink); }
+    .filter-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+    .projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+    .project-card { background: var(--code-bg); padding: 2.5rem; border: 1px solid var(--line); transition: background 0.2s; position: relative; overflow: hidden; }
+    .project-card:hover { background: #e8e4dc; }
+    .project-card::after { content: '→'; position: absolute; right: 2rem; bottom: 2rem; font-size: 1.2rem; color: var(--line); transition: color 0.2s, transform 0.2s; }
+    .project-card:hover::after { color: var(--accent); transform: translate(4px, -4px); }
+    .project-num { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; margin-bottom: 2rem; }
+    .project-card h3 { font-family: 'DM Serif Display', serif; font-size: 1.5rem; margin-bottom: 0.8rem; letter-spacing: -0.01em; }
+    .project-card p { font-size: 0.9rem; color: var(--muted); line-height: 1.6; margin-bottom: 1.5rem; }
+    .project-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .tag { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.3rem 0.7rem; border: 1px solid var(--line); color: var(--muted); cursor: pointer; transition: border-color 0.2s, color 0.2s; }
+    .tag:hover { border-color: var(--accent); color: var(--accent); }
+    .tag.tag-active { border-color: var(--accent); color: var(--accent); background: rgba(201,84,31,0.06); }
+    .project-links { display: flex; gap: 1rem; margin-top: 1.2rem; }
+    .project-link { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .project-link:hover { color: var(--accent); }
+    .no-results { grid-column: 1 / -1; padding: 4rem 2rem; text-align: center; font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--muted); letter-spacing: 0.08em; }
+    .results-meta { margin-top: 1.5rem; font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+
+    /* SKILLS */
+    .skills-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 5rem; align-items: start; }
+    .skills-left { position: sticky; top: 8rem; }
+    .skills-left p { color: var(--muted); font-size: 0.9rem; margin-top: 1rem; }
+    .skill-group { margin-bottom: 2.5rem; }
+    .skill-group-title { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--accent); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--line); }
+    .skill-list { list-style: none; }
+    .skill-list li { display: flex; align-items: center; gap: 1rem; padding: 0.7rem 0; border-bottom: 1px solid var(--line); font-size: 0.9rem; }
+    .skill-list li:last-child { border-bottom: none; }
+    .skill-name-col { min-width: 190px; flex-shrink: 0; color: var(--ink); }
+    .skill-bar-wrap { flex: 1; height: 3px; background: var(--line); position: relative; border-radius: 2px; overflow: hidden; }
+    .skill-bar { position: absolute; top: 0; left: 0; height: 100%; background: var(--ink); transform-origin: left; transform: scaleX(0); transition: transform 1s ease; border-radius: 2px; }
+    .skill-pct { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--muted); min-width: 2.8rem; text-align: right; flex-shrink: 0; }
+
+    /* CONTACT */
+    #contact .section-inner { text-align: center; }
+    #contact h2 { margin-bottom: 1rem; }
+    .contact-sub { color: var(--muted); font-size: 1rem; max-width: 420px; margin: 0 auto 3rem; }
+    .contact-email { font-family: 'DM Serif Display', serif; font-size: clamp(1.8rem, 4vw, 3rem); color: var(--ink); text-decoration: none; border-bottom: 2px solid var(--line); transition: border-color 0.2s, color 0.2s; }
+    .contact-email:hover { border-color: var(--accent); color: var(--accent); }
+    .social-links { margin-top: 3rem; display: flex; justify-content: center; gap: 2rem; }
+    .social-links a { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .social-links a:hover { color: var(--ink); }
+
+    /* CONTACT FORM */
+    .contact-form { max-width: 560px; margin: 3rem auto 0; text-align: left; }
+    .form-divider { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; }
+    .form-divider-line { flex: 1; height: 1px; background: var(--line); }
+    .form-divider span { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap; }
+    .form-row { margin-bottom: 1.5rem; }
+    .form-row label { display: block; font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; }
+    .form-row input, .form-row textarea, .form-row select { width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--line); padding: 0.6rem 0; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; color: var(--ink); outline: none; transition: border-color 0.2s; appearance: none; -webkit-appearance: none; }
+    .form-row input:focus, .form-row textarea:focus, .form-row select:focus { border-color: var(--accent); }
+    .form-row textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+    .form-error-msg { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: #c0392b; letter-spacing: 0.05em; margin-top: 0.3rem; display: none; }
+    .form-error-msg.show { display: block; }
+    .form-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; flex-wrap: wrap; gap: 1rem; }
+    .form-status-text { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.05em; color: var(--muted); }
+    .form-status-text.ready { color: #27704d; }
+    .btn-send { padding: 0.85rem 2rem; background: var(--ink); color: var(--paper); font-family: 'DM Mono', monospace; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; border: none; cursor: pointer; transition: background 0.2s, opacity 0.2s; }
+    .btn-send:hover { background: var(--accent); }
+    .btn-send.sending { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
+    .form-alert { margin-top: 1rem; padding: 0.9rem 1.2rem; border: 1px solid #c0392b; background: #fdf0ef; font-family: 'DM Mono', monospace; font-size: 0.7rem; color: #c0392b; letter-spacing: 0.04em; display: none; }
+    .form-alert.show { display: block; }
+    .form-success { display: flex; align-items: flex-start; gap: 1rem; padding: 1.5rem; border: 1px solid var(--line); background: var(--code-bg); margin-top: 2rem; text-align: left; }
+    .form-success .check { font-size: 1.1rem; color: var(--accent); flex-shrink: 0; }
+    .form-success p { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--ink); letter-spacing: 0.04em; line-height: 1.7; }
+    .form-success strong { color: var(--accent); }
+
+    /* SCROLL TOP */
+    .scroll-top { position: fixed; bottom: 2rem; right: 2rem; width: 38px; height: 38px; background: var(--ink); color: var(--paper); border: none; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; z-index: 99; transition: background 0.2s, transform 0.2s, opacity 0.3s; opacity: 0; pointer-events: none; }
+    .scroll-top.visible { opacity: 1; pointer-events: auto; }
+    .scroll-top:hover { background: var(--accent); transform: translateY(-2px); }
+
+    /* FOOTER */
+    footer { border-top: 1px solid var(--line); }
+    footer .footer-inner { max-width: 1100px; margin: 0 auto; padding: 2rem 4rem; display: flex; justify-content: space-between; align-items: center; }
+    footer span { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--muted); letter-spacing: 0.08em; }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+
+    /*
+     * .reveal starts hidden. JS adds .visible when scrolled into view.
+     * IMPORTANT: only static elements (headers, text blocks) use .reveal.
+     * ng-repeat containers do NOT use .reveal — they render after Angular
+     * bootstraps and would stay invisible if the observer fires too early.
+     */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav { padding: 1.2rem 1.5rem; } .nav-links { display: none; }
+      .section-inner { padding: 5rem 1.5rem; } .hero-inner { padding: 6rem 1.5rem 4rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .about-left { position: static; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .skills-layout { grid-template-columns: 1fr; gap: 3rem; }
+      .skills-left { position: static; }
+      .skill-name-col { min-width: 130px; }
+      .hero-bg-text { display: none; }
+      footer .footer-inner { padding: 2rem 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+      .form-footer { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body ng-controller="PortfolioCtrl">
+
+  <!-- NAV -->
+  <nav ng-class="{'scrolled': isScrolled}">
+    <span class="nav-logo">Sai Kiran Munugoti · Data Scientist</span>
+    <ul class="nav-links">
+      <li ng-repeat="link in navLinks">
+        <a href="{{ link.href }}" ng-class="{'nav-active': activeSection === link.id}">{{ link.label }}</a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <div id="hero">
+    <div class="hero-inner">
+      <p class="hero-label">Data Scientist · ML Engineer</p>
+      <h1>Sai Kiran<br><em>Munugoti</em></h1>
+      <p class="hero-sub">I build machine learning systems and analytical pipelines that help teams understand complex data — and act on it with confidence.</p>
+      <div class="hero-cta">
+        <a href="#projects" class="btn-primary">View Work</a>
+        <a href="#contact" class="btn-ghost">Get in touch</a>
+      </div>
+    </div>
+    <div class="hero-bg-text">DS</div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div class="about-left reveal">
+          <div class="avatar-box">
+            <img src="https://drive.google.com/uc?export=view&id=1LF8cu3LmT4ae5wFWfdv9MZvwj6CS5spX" alt="Sai Kiran Munugoti">
+          </div>
+        </div>
+        <div class="about-text reveal">
+          <p class="section-label">About me</p>
+          <h2>Data-driven thinking, human-centered results.</h2>
+          <p>I'm Sai Kiran Munugoti, a data scientist with 7+ years building end-to-end ML solutions across fintech, healthcare, insurance and e-commerce. I care deeply about the full pipeline — from messy raw data to models that actually get used in production.</p>
+          <p>My work sits at the intersection of statistical rigor and engineering pragmatism. I believe the best models are the ones your stakeholders actually trust and use.</p>
+          <div class="about-stats">
+            <div ng-repeat="stat in aboutStats">
+              <div class="stat-value">{{ stat.value }}</div>
+              <div class="stat-label">{{ stat.label }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- PROJECTS — no .reveal on the grid; cards are rendered by ng-repeat -->
+  <section id="projects">
+    <div class="section-inner">
+      <div class="projects-header reveal">
+        <p class="section-label">Selected work</p>
+        <h2>Projects</h2>
+      </div>
+      <div class="filter-bar reveal">
+        <span class="filter-label">Filter:</span>
+        <button class="filter-btn" ng-class="{'active': activeFilter === 'All'}" ng-click="setFilter('All')">All</button>
+        <button class="filter-btn" ng-repeat="tag in allTags track by $index" ng-class="{'active': activeFilter === tag}" ng-click="setFilter(tag)">{{ tag }}</button>
+      </div>
+      <!-- Grid is always visible — cards inside are rendered by Angular -->
+      <div class="projects-grid">
+        <div class="project-card" ng-repeat="p in filteredProjects() track by p.num">
+          <div class="project-num">{{ p.num }} / {{ p.year }}</div>
+          <h3>{{ p.title }}</h3>
+          <p>{{ p.description }}</p>
+          <div class="project-tags">
+            <span class="tag" ng-repeat="tag in p.tags track by $index" ng-class="{'tag-active': activeFilter === tag}" ng-click="setFilter(tag)">{{ tag }}</span>
+          </div>
+          <div class="project-links" ng-if="p.github || p.demo">
+            <a ng-if="p.github" ng-href="{{ p.github }}" class="project-link" target="_blank">GitHub ↗</a>
+            <a ng-if="p.demo"   ng-href="{{ p.demo }}"   class="project-link" target="_blank">Demo ↗</a>
+          </div>
+        </div>
+        <div class="no-results" ng-if="filteredProjects().length === 0">
+          No projects tagged "{{ activeFilter }}" — <button class="btn-ghost" ng-click="setFilter('All')">clear filter</button>
+        </div>
+      </div>
+      <p class="results-meta">
+        Showing {{ filteredProjects().length }} of {{ projects.length }} projects
+        <span ng-if="activeFilter !== 'All'"> · filtered by "{{ activeFilter }}"</span>
+      </p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- SKILLS — no .reveal on skill rows; rendered by ng-repeat -->
+  <section id="skills">
+    <div class="section-inner">
+      <div class="skills-layout">
+        <div class="skills-left reveal">
+          <p class="section-label">Expertise</p>
+          <h2>Skills &amp; Tools</h2>
+          <p>A toolkit built over years of shipping real-world data products — from first EDA to production deployment.</p>
+        </div>
+        <!-- skills-right has no .reveal so it is always visible -->
+        <div class="skills-right">
+          <div class="skill-group" ng-repeat="group in skillGroups">
+            <div class="skill-group-title">{{ group.title }}</div>
+            <ul class="skill-list">
+              <li ng-repeat="skill in group.skills track by $index">
+                <span class="skill-name-col">{{ skill.name }}</span>
+                <div class="skill-bar-wrap">
+                  <div class="skill-bar" data-level="{{ skill.level }}" skill-animate></div>
+                </div>
+                <span class="skill-pct">{{ skill.level * 100 | number:0 }}%</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-inner">
+      <div class="reveal">
+        <p class="section-label">Get in touch</p>
+        <h2>Let's work together.</h2>
+        <p class="contact-sub">Whether you have a project in mind, a role to fill, or just want to talk data — I'm always open to a conversation.</p>
+        <a href="mailto:saikiranmunugoti@gmail.com" class="contact-email">saikiranmunugoti@gmail.com</a>
+        <div class="social-links">
+          <a href="https://www.linkedin.com/in/mr-kiran/" target="_blank">LinkedIn</a>
+          <a href="#" target="_blank">GitHub</a>
+          <a href="#" target="_blank">Kaggle</a>
+          <a href="https://drive.google.com/file/d/1qupWtz4c1AuD1ZdvC_y6mN6ERHtt0yLc/view?usp=drive_link" target="_blank">Resume ↓</a>
+        </div>
+
+        <div class="contact-form" ng-show="!formSubmitted">
+          <div class="form-divider">
+            <div class="form-divider-line"></div>
+            <span>Or send a direct message</span>
+            <div class="form-divider-line"></div>
+          </div>
+          <div class="form-row">
+            <label>Name</label>
+            <input type="text" placeholder="Your full name" ng-model="form.name" ng-blur="touch('name')" />
+            <span class="form-error-msg" ng-class="{'show': touched.name && !form.name}">Name is required.</span>
+          </div>
+          <div class="form-row">
+            <label>Email</label>
+            <input type="email" placeholder="you@example.com" ng-model="form.email" ng-blur="touch('email')" />
+            <span class="form-error-msg" ng-class="{'show': touched.email && !isValidEmail(form.email)}">Enter a valid email address.</span>
+          </div>
+          <div class="form-row">
+            <label>Topic</label>
+            <select ng-model="form.topic" ng-blur="touch('topic')">
+              <option value="" disabled>Select a topic…</option>
+              <option ng-repeat="opt in topicOptions track by $index" value="{{ opt }}">{{ opt }}</option>
+            </select>
+            <span class="form-error-msg" ng-class="{'show': touched.topic && !form.topic}">Please choose a topic.</span>
+          </div>
+          <div class="form-row">
+            <label>Message</label>
+            <textarea placeholder="Describe your project or question…" ng-model="form.message" ng-blur="touch('message')" rows="4"></textarea>
+            <span class="form-error-msg" ng-class="{'show': touched.message && (!form.message || form.message.length < 20)}">Please write at least 20 characters.</span>
+          </div>
+          <div class="form-footer">
+            <span class="form-status-text" ng-class="{'ready': isFormValid()}">
+              {{ isFormValid() ? '✓ Ready to send' : 'All fields required' }}
+            </span>
+            <button class="btn-send" ng-class="{'sending': submitting}" ng-click="submitForm()">
+              {{ submitting ? 'Sending…' : 'Send Message' }}
+            </button>
+          </div>
+          <div class="form-alert" id="formAlert">
+            Could not send your message. Please email directly at saikiranmunugoti@gmail.com
+          </div>
+        </div>
+
+        <div class="form-success" ng-show="formSubmitted">
+          <span class="check">✓</span>
+          <p>Thanks, <strong>{{ submittedName }}</strong>! Your message has been sent. I'll get back to you soon.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <span>© {{ currentYear }} Sai Kiran Munugoti</span>
+      <span>Data Scientist · ML Engineer</span>
+    </div>
+  </footer>
+
+  <button class="scroll-top" id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
+
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"></script>
+  <script>
+  'use strict';
+
+  var EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';
+  var EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';
+  var EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';
+
+  emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+
+  angular.module('portfolioApp', [])
+
+  /* Skill bar — animates on scroll into view */
+  .directive('skillAnimate', function () {
+    return {
+      restrict: 'A',
+      link: function (scope, element) {
+        var el    = element[0];
+        var done  = false;
+
+        /* data-level is an Angular interpolated attr — read it after render */
+        scope.$watch(function () { return el.getAttribute('data-level'); }, function (val) {
+          if (!val || done) return;
+          var level = parseFloat(val) || 0;
+          var obs = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting && !done) {
+                done = true;
+                setTimeout(function () { el.style.transform = 'scaleX(' + level + ')'; }, 200);
+                obs.unobserve(el);
+              }
+            });
+          }, { threshold: 0.3 });
+          obs.observe(el);
+        });
+      }
+    };
+  })
+
+  .controller('PortfolioCtrl', function ($scope, $timeout) {
+
+    $scope.navLinks = [
+      { id: 'about',    label: 'About',    href: '#about'    },
+      { id: 'projects', label: 'Projects', href: '#projects' },
+      { id: 'skills',   label: 'Skills',   href: '#skills'   },
+      { id: 'contact',  label: 'Contact',  href: '#contact'  }
+    ];
+    $scope.currentYear   = new Date().getFullYear();
+    $scope.isScrolled    = false;
+    $scope.activeSection = 'about';
+
+    $scope.aboutStats = [
+      { value: '7+',    label: 'Years experience' },
+      { value: '30+',   label: 'Projects shipped'  },
+      { value: '4',     label: 'Industries'         },
+      { value: 'M.Sc.', label: 'IT & Management'    }
+    ];
+
+    $scope.projects = [
+      { num:'01', year:'2024', title:'Churn Prediction Engine',   description:'Real-time churn prediction for a SaaS platform, integrating behavioral features and deployed via FastAPI. Reduced churn by 18% in A/B testing.',           tags:['Python','XGBoost','FastAPI','AWS'],          github:'#', demo:null },
+      { num:'02', year:'2024', title:'Clinical NLP Pipeline',     description:'NLP extraction pipeline for unstructured clinical notes, identifying diagnoses and medications with 94% precision for a hospital system.',              tags:['NLP','spaCy','BERT','Healthcare'],           github:'#', demo:null },
+      { num:'03', year:'2023', title:'Demand Forecasting System', description:'Hierarchical time-series forecasting for supply chain demand planning. Improved forecast accuracy by 23% over the legacy system.',                      tags:['Time Series','Prophet','Airflow'],           github:'#', demo:null },
+      { num:'04', year:'2023', title:'Fraud Detection at Scale',  description:'Real-time fraud detection processing 50k+ transactions/day with 97% recall, reducing false positives by 40%.',                                          tags:['Anomaly Detection','Spark','Kafka'],         github:'#', demo:null }
+    ];
+
+    $scope.allTags = [];
+    $scope.projects.forEach(function (p) {
+      p.tags.forEach(function (t) { if ($scope.allTags.indexOf(t) === -1) $scope.allTags.push(t); });
+    });
+    $scope.activeFilter = 'All';
+    $scope.setFilter = function (t) { $scope.activeFilter = t; };
+    $scope.filteredProjects = function () {
+      return $scope.activeFilter === 'All' ? $scope.projects :
+        $scope.projects.filter(function (p) { return p.tags.indexOf($scope.activeFilter) > -1; });
+    };
+
+    $scope.skillGroups = [
+      { title:'Languages',      skills:[{name:'Python',level:.95},{name:'SQL',level:.9},{name:'R',level:.7},{name:'Bash / Shell',level:.65}] },
+      { title:'ML / Data',      skills:[{name:'Scikit-learn / XGBoost',level:.95},{name:'PyTorch / TensorFlow',level:.8},{name:'HuggingFace / NLP',level:.75},{name:'Pandas / NumPy',level:.95}] },
+      { title:'Infrastructure', skills:[{name:'AWS (SageMaker, S3, EC2)',level:.8},{name:'Docker / Kubernetes',level:.7},{name:'Airflow / dbt',level:.75},{name:'Spark / Kafka',level:.65}] }
+    ];
+
+    /* Contact form */
+    $scope.topicOptions  = ['Job Opportunity','Freelance / Consulting','Collaboration','Speaking / Research','Other'];
+    $scope.form          = { name:'', email:'', topic:'', message:'' };
+    $scope.touched       = {};
+    $scope.formSubmitted = false;
+    $scope.submitting    = false;
+    $scope.submittedName = '';
+
+    $scope.touch = function (f) { $scope.touched[f] = true; };
+    $scope.isValidEmail = function (e) { return e && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); };
+    $scope.isFormValid = function () {
+      return $scope.form.name && $scope.form.name.length >= 2 &&
+             $scope.isValidEmail($scope.form.email) &&
+             $scope.form.topic &&
+             $scope.form.message && $scope.form.message.length >= 20;
+    };
+
+    $scope.submitForm = function () {
+      $scope.touched = { name:true, email:true, topic:true, message:true };
+      if (!$scope.isFormValid() || $scope.submitting) return;
+      $scope.submitting = true;
+      document.getElementById('formAlert').classList.remove('show');
+      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+        from_name:  $scope.form.name,
+        from_email: $scope.form.email,
+        topic:      $scope.form.topic,
+        message:    $scope.form.message
+      })
+      .then(function () {
+        $scope.$apply(function () {
+          $scope.submittedName = $scope.form.name;
+          $scope.submitting    = false;
+          $scope.formSubmitted = true;
+          $scope.form    = { name:'', email:'', topic:'', message:'' };
+          $scope.touched = {};
+        });
+      })
+      .catch(function (err) {
+        console.error('EmailJS error:', err);
+        $scope.$apply(function () { $scope.submitting = false; });
+        document.getElementById('formAlert').classList.add('show');
+      });
+    };
+
+    /* Scroll: active nav + scroll-to-top */
+    var sectionIds = ['contact','skills','projects','about'];
+    var scrollBtn  = document.getElementById('scrollTopBtn');
+    window.addEventListener('scroll', function () {
+      var y = window.pageYOffset;
+      $scope.$apply(function () {
+        $scope.isScrolled = y > 80;
+        for (var i = 0; i < sectionIds.length; i++) {
+          var el = document.getElementById(sectionIds[i]);
+          if (el && y >= el.offsetTop - 220) { $scope.activeSection = sectionIds[i]; break; }
+        }
+      });
+      if (scrollBtn) scrollBtn.classList.toggle('visible', y > 300);
+    });
+
+    /*
+     * Scroll reveal — only watches elements with .reveal (static headers/text).
+     * ng-repeat grids and skill rows do NOT have .reveal, so they are always
+     * visible and never get stuck hidden.
+     */
+    $timeout(function () {
+      var obs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry, i) {
+          if (entry.isIntersecting) {
+            setTimeout(function () { entry.target.classList.add('visible'); }, i * 80);
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      document.querySelectorAll('.reveal').forEach(function (el) { obs.observe(el); });
+    }, 200);
+
+  });
+  </script>
+</body>
+</html>
