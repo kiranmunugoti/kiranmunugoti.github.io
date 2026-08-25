@@ -1,28 +1,89 @@
-# Portfolio
+# Data Science Portfolio
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.0.1.
+Welcome! This repository hosts my professional data science portfolio website and supporting project documentation.
 
-## Development server
+## 🌐 Live Portfolio
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+**Visit my portfolio**: [https://kiranmunugoti.github.io/](https://kiranmunugoti.github.io/)
 
-## Code scaffolding
+This is your one-stop destination to learn about my work, skills, and experience in data science and analytics.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+---
 
-## Build
+## 📄 Resume
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+**Download my resume**: [https://kiranmunugoti.github.io/resume.pdf](https://kiranmunugoti.github.io/resume.pdf)
 
-## Running unit tests
+My resume is embedded on the portfolio website and available for direct download. It outlines my professional experience, technical skills, and educational background.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+---
 
-## Running end-to-end tests
+## 📊 About Me
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+I'm a data scientist with **7+ years of experience** building and deploying machine learning models across:
 
-## Further help
+- **Financial Services**: Risk modeling, credit analytics
+- **Insurance**: Claims prediction, underwriting optimization
+- **Healthcare**: Patient outcomes analysis, predictive modeling
+- **Hospitality Operations**: Forecasting and operational analytics
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
-"# portfolio" 
+I specialize in end-to-end data science workflows—from exploratory analysis and model development to production deployment and business impact.
+
+---
+
+## 🔗 Featured Projects
+
+My portfolio showcases four key data science projects with complete code, documentation, and results:
+
+1. **Risk Scoring Model** — Predicting and ranking financial risk using classification techniques
+2. **Financial Forecasting** — Time series analysis for business metrics and revenue prediction
+3. **Customer Churn Segmentation** — Identifying at-risk customer segments for retention strategies
+4. **Fraud Detection** — Real-time anomaly detection and classification for transaction monitoring
+
+**Explore the projects**: [Work-and-portfolio Repository](https://github.com/kiranmunugoti/Work-and-portfolio)
+
+Each project includes:
+- Full Python source code
+- Synthetic datasets (privacy-safe)
+- README with methodology and results
+- Generated visualizations and charts
+- Requirements files for reproducibility
+
+---
+
+## 🛠️ Website Development Stack
+
+**This portfolio website is built with:**
+
+- **Frontend Languages**:
+  - HTML5 — Semantic markup and structure
+  - CSS3 — Responsive design and styling
+  - JavaScript (ES6+) — Interactivity and dynamic features
+
+- **Libraries & Services**:
+  - EmailJS — Contact form backend integration
+  - Mobile-responsive design — Works seamlessly on all devices
+  - Base64 encoding — Embedded assets for reliability
+
+- **Hosting & Deployment**:
+  - GitHub Pages — Free, secure hosting
+  - Git — Version control and automated deployment
+  - Custom domain configuration
+
+- **Browser Compatibility**:
+  - Modern browsers (Chrome, Firefox, Safari, Edge)
+  - Mobile fallback support for in-app browsers (WhatsApp, Gmail preview)
+
+---
+
+## 📊 Data Science & Projects Technical Stack
+
+- **Languages**: Python, SQL
+- **Data & ML**: pandas, scikit-learn, TensorFlow, XGBoost
+- **Visualization**: Matplotlib, Seaborn, Plotly
+- **Deployment**: GitHub, Jupyter Notebooks, production pipelines
+- **Other**: Time series analysis, statistical modeling, A/B testing
+
+---
+
+## 📂 Repository Structure
