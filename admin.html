@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio Repo Picker</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: #f8f9fa;
+    color: #2c3e50;
+  }
+  h1 { margin-bottom: 0.25rem; }
+  .subtitle { color: #666; margin-bottom: 2rem; }
+  .panel {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    margin-bottom: 1.5rem;
+  }
+  label { font-weight: 600; display: block; margin-bottom: 0.5rem; }
+  input[type="text"] {
+    width: 100%;
+    padding: 0.7rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+  }
+  button {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 0.7rem 1.4rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 0.75rem;
+  }
+  button:hover { background: #2980b9; }
+  button.secondary { background: #95a5a6; }
+  button.secondary:hover { background: #7f8c8d; }
+  #repo-list {
+    max-height: 420px;
+    overflow-y: auto;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    margin-top: 1rem;
+  }
+  .repo-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.9rem 1rem;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .repo-row:last-child { border-bottom: none; }
+  .repo-row input[type="checkbox"] { margin-top: 0.3rem; transform: scale(1.2); }
+  .repo-info { flex: 1; }
+  .repo-name { font-weight: 600; }
+  .repo-desc { color: #666; font-size: 0.9rem; margin-top: 0.15rem; }
+  .repo-meta { color: #999; font-size: 0.8rem; margin-top: 0.25rem; }
+  .selected-config { margin-top: 0.5rem; display: none; }
+  .selected-config.visible { display: block; }
+  .field-row { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
+  .field-row input { flex: 1; padding: 0.4rem; font-size: 0.85rem; border: 1px solid #ddd; border-radius: 4px; }
+  pre {
+    background: #2c3e50;
+    color: #ecf0f1;
+    padding: 1.2rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 0.85rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .status { margin-top: 0.75rem; font-size: 0.9rem; }
+  .status.error { color: #e74c3c; }
+  .status.success { color: #27ae60; }
+  .count-badge {
+    display: inline-block;
+    background: #eaf2fb;
+    color: #2980b9;
+    padding: 0.2rem 0.7rem;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<h1>🗂️ Portfolio Repo Picker</h1>
+<p class="subtitle">Pick which GitHub repositories show up on your portfolio — no manual JSON editing.</p>
+
+<div class="panel">
+  <label for="username">GitHub Username</label>
+  <input type="text" id="username" placeholder="e.g. kiranmunugoti" value="kiranmunugoti">
+  <button onclick="loadRepos()">Load My Repositories</button>
+  <div id="load-status" class="status"></div>
+</div>
+
+<div class="panel" id="picker-panel" style="display:none;">
+  <label>Select repositories to display <span class="count-badge" id="selected-count">0 selected</span></label>
+  <input type="text" id="search-box" placeholder="Search repos..." oninput="filterRepos()" style="margin-bottom: 0.5rem;">
+  <div id="repo-list"></div>
+  <button onclick="generateConfig()">Generate Config</button>
+</div>
+
+<div class="panel" id="output-panel" style="display:none;">
+  <label>Your repos-config.json</label>
+  <pre id="config-output"></pre>
+  <button onclick="downloadConfig()">⬇️ Download repos-config.json</button>
+  <button class="secondary" onclick="copyConfig()">📋 Copy to Clipboard</button>
+  <div id="copy-status" class="status"></div>
+
+  <hr style="margin: 1.5rem 0; border: none; border-top: 1px solid #eee;">
+
+  <label>Or commit this directly to your repo</label>
+  <input type="text" id="repo-name" placeholder="Repo name (e.g. kiranmunugoti.github.io)" value="kiranmunugoti.github.io" style="margin-bottom: 0.6rem;">
+  <input type="text" id="gh-token" placeholder="GitHub Personal Access Token" style="margin-bottom: 0.6rem;">
+  <button onclick="commitToGitHub()">🚀 Commit &amp; Push Automatically</button>
+  <div id="commit-status" class="status"></div>
+  <p style="color:#999; font-size:0.8rem; margin-top:0.5rem;">Your token is only held in this page's memory for this session — it is never saved, stored, or sent anywhere except directly to GitHub's API.</p>
+</div>
+
+<div class="panel">
+  <h3 style="margin-top:0;">Option A: Manual (no token needed)</h3>
+  <ol>
+    <li>Enter your GitHub username and click <strong>Load My Repositories</strong></li>
+    <li>Check the boxes next to the repos you want on your portfolio</li>
+    <li>Click <strong>Generate Config</strong>, then download the file</li>
+    <li>Replace <code>repos-config.json</code> in your repo with the downloaded file, then commit &amp; push manually</li>
+  </ol>
+
+  <h3>Option B: Auto-commit (one click, needs a token)</h3>
+  <ol>
+    <li>Create a token: go to <a href="https://github.com/settings/tokens?type=beta" target="_blank">github.com/settings/tokens</a> → <strong>Generate new token (fine-grained)</strong></li>
+    <li>Under <strong>Repository access</strong>, select <strong>Only select repositories</strong> → choose your portfolio repo (e.g. <code>kiranmunugoti.github.io</code>)</li>
+    <li>Under <strong>Permissions</strong>, expand <strong>Repository permissions</strong> → set <strong>Contents</strong> to <strong>Read and write</strong></li>
+    <li>Generate the token and copy it (it's shown only once)</li>
+    <li>Paste it into the <strong>GitHub Personal Access Token</strong> field above, confirm the repo name, and click <strong>Commit &amp; Push Automatically</strong></li>
+    <li>Done — no download/upload needed. GitHub Pages will rebuild your site within a minute or two</li>
+  </ol>
+  <p style="color:#666; font-size:0.9rem;">
+    Because the token is scoped to only this one repo with only Contents write access, even if it leaked it couldn't touch your other repos or account settings. Still, treat it like a password — close this tab when you're done, and revoke the token from GitHub's settings page anytime you want.
+  </p>
+</div>
+
+<script>
+let allRepos = [];
+let selectedRepos = {}; // keyed by repo full_name
+
+async function loadRepos() {
+  const username = document.getElementById('username').value.trim();
+  const statusEl = document.getElementById('load-status');
+  if (!username) {
+    statusEl.textContent = 'Please enter a GitHub username.';
+    statusEl.className = 'status error';
+    return;
+  }
+  statusEl.textContent = 'Loading repositories...';
+  statusEl.className = 'status';
+
+  try {
+    let repos = [];
+    let page = 1;
+    // Paginate in case of >100 repos
+    while (true) {
+      const res = await fetch(`https://api.github.com/users/${username}/repos?per_page=100&page=${page}&sort=updated`);
+      if (!res.ok) throw new Error(`GitHub API error: ${res.status}`);
+      const data = await res.json();
+      repos = repos.concat(data);
+      if (data.length < 100) break;
+      page++;
+    }
+
+    allRepos = repos;
+    statusEl.textContent = `Loaded ${repos.length} repositories.`;
+    statusEl.className = 'status success';
+    renderRepoList(repos);
+    document.getElementById('picker-panel').style.display = 'block';
+  } catch (err) {
+    statusEl.textContent = `Error: ${err.message}. Check the username and try again.`;
+    statusEl.className = 'status error';
+  }
+}
+
+function renderRepoList(repos) {
+  const list = document.getElementById('repo-list');
+  list.innerHTML = repos.map(repo => `
+    <div class="repo-row" data-name="${repo.name.toLowerCase()}">
+      <input type="checkbox" id="chk-${repo.id}" onchange="toggleRepo('${repo.full_name}', ${repo.id})">
+      <div class="repo-info">
+        <div class="repo-name">${repo.name}</div>
+        <div class="repo-desc">${repo.description ? escapeHtml(repo.description) : 'No description'}</div>
+        <div class="repo-meta">⭐ ${repo.stargazers_count} · ${repo.language || 'N/A'} · Updated ${new Date(repo.updated_at).toLocaleDateString()}</div>
+        <div class="selected-config" id="config-${repo.id}">
+          <div class="field-row">
+            <input type="text" placeholder="Display name" id="displayname-${repo.id}" value="${escapeHtml(repo.name)}">
+          </div>
+          <div class="field-row">
+            <input type="text" placeholder="Description" id="description-${repo.id}" value="${repo.description ? escapeHtml(repo.description) : ''}">
+          </div>
+          <div class="field-row">
+            <input type="text" placeholder="Tags (comma-separated)" id="tags-${repo.id}" value="${repo.language || ''}">
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleRepo(fullName, id) {
+  const checkbox = document.getElementById(`chk-${id}`);
+  const configDiv = document.getElementById(`config-${id}`);
+  if (checkbox.checked) {
+    selectedRepos[fullName] = id;
+    configDiv.classList.add('visible');
+  } else {
+    delete selectedRepos[fullName];
+    configDiv.classList.remove('visible');
+  }
+  document.getElementById('selected-count').textContent = `${Object.keys(selectedRepos).length} selected`;
+}
+
+function filterRepos() {
+  const term = document.getElementById('search-box').value.toLowerCase();
+  document.querySelectorAll('.repo-row').forEach(row => {
+    row.style.display = row.dataset.name.includes(term) ? 'flex' : 'none';
+  });
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function generateConfig() {
+  const username = document.getElementById('username').value.trim();
+  const repositories = Object.entries(selectedRepos).map(([fullName, id]) => {
+    const repo = allRepos.find(r => r.id === id);
+    const displayName = document.getElementById(`displayname-${id}`).value || repo.name;
+    const description = document.getElementById(`description-${id}`).value || '';
+    const tagsRaw = document.getElementById(`tags-${id}`).value || '';
+    const tags = tagsRaw.split(',').map(t => t.trim()).filter(Boolean);
+
+    return {
+      name: displayName,
+      repo: repo.name,
+      path: "",
+      description: description,
+      tags: tags.length ? tags : ["Project"]
+    };
+  });
+
+  const config = { username, repositories };
+  const jsonStr = JSON.stringify(config, null, 2);
+  document.getElementById('config-output').textContent = jsonStr;
+  document.getElementById('output-panel').style.display = 'block';
+  document.getElementById('output-panel').scrollIntoView({ behavior: 'smooth' });
+}
+
+function downloadConfig() {
+  const jsonStr = document.getElementById('config-output').textContent;
+  const blob = new Blob([jsonStr], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'repos-config.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function copyConfig() {
+  const jsonStr = document.getElementById('config-output').textContent;
+  navigator.clipboard.writeText(jsonStr).then(() => {
+    const statusEl = document.getElementById('copy-status');
+    statusEl.textContent = 'Copied to clipboard!';
+    statusEl.className = 'status success';
+    setTimeout(() => { statusEl.textContent = ''; }, 2500);
+  });
+}
+
+// Encode a UTF-8 string to base64 (handles special characters/emoji safely)
+function utf8ToBase64(str) {
+  const bytes = new TextEncoder().encode(str);
+  let binary = '';
+  bytes.forEach(b => binary += String.fromCharCode(b));
+  return btoa(binary);
+}
+
+async function commitToGitHub() {
+  const username = document.getElementById('username').value.trim();
+  const repoName = document.getElementById('repo-name').value.trim();
+  const token = document.getElementById('gh-token').value.trim();
+  const jsonStr = document.getElementById('config-output').textContent;
+  const statusEl = document.getElementById('commit-status');
+  const filePath = 'repos-config.json';
+
+  if (!username || !repoName || !token) {
+    statusEl.textContent = 'Please fill in username, repo name, and token.';
+    statusEl.className = 'status error';
+    return;
+  }
+  if (!jsonStr) {
+    statusEl.textContent = 'Generate the config first.';
+    statusEl.className = 'status error';
+    return;
+  }
+
+  statusEl.textContent = 'Committing to GitHub...';
+  statusEl.className = 'status';
+
+  const apiUrl = `https://api.github.com/repos/${username}/${repoName}/contents/${filePath}`;
+  const headers = {
+    'Authorization': `Bearer ${token}`,
+    'Accept': 'application/vnd.github+json'
+  };
+
+  try {
+    // Step 1: check if file exists to get its SHA (required to update an existing file)
+    let sha = null;
+    const getRes = await fetch(apiUrl, { headers });
+    if (getRes.status === 200) {
+      const fileData = await getRes.json();
+      sha = fileData.sha;
+    } else if (getRes.status !== 404) {
+      const errBody = await getRes.json().catch(() => ({}));
+      throw new Error(`Lookup failed (${getRes.status}): ${errBody.message || 'Unknown error'}`);
+    }
+
+    // Step 2: create or update the file
+    const body = {
+      message: sha ? 'Update repos-config.json via Repo Picker' : 'Add repos-config.json via Repo Picker',
+      content: utf8ToBase64(jsonStr),
+      ...(sha ? { sha } : {})
+    };
+
+    const putRes = await fetch(apiUrl, {
+      method: 'PUT',
+      headers: { ...headers, 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+
+    if (!putRes.ok) {
+      const errBody = await putRes.json().catch(() => ({}));
+      throw new Error(`Commit failed (${putRes.status}): ${errBody.message || 'Unknown error'}`);
+    }
+
+    statusEl.textContent = '✅ Committed! Your portfolio will update within a minute or two.';
+    statusEl.className = 'status success';
+  } catch (err) {
+    statusEl.textContent = `Error: ${err.message}`;
+    statusEl.className = 'status error';
+  }
+}
+</script>
+
+</body>
+</html>
