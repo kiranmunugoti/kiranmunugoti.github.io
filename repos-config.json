@@ -5,18 +5,9 @@
       "name": "hst-food-tracker",
       "repo": "hst-food-tracker",
       "path": "",
-      "description": "Java based application that displays the calorie count of the scanned food items",
+      "description": "",
       "tags": [
         "JavaScript"
-      ]
-    },
-    {
-      "name": "Work-and-portfolio",
-      "repo": "Work-and-portfolio",
-      "path": "",
-      "description": "Contains the project work and some personal project ideas.",
-      "tags": [
-        "Python"
       ]
     }
   ]
