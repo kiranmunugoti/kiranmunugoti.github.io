@@ -146,6 +146,9 @@
     <li>No buttons to click, nothing to download or upload — watch the "Auto-saving..." status turn into "✅ Auto-saved"</li>
   </ol>
   <p style="color:#666; font-size:0.9rem;">
+    For each checked repo, you can also set a <strong>Year</strong> and an optional <strong>chart image URL</strong> (a link to any image — a screenshot, a chart export, etc.) to make the card match your original curated style. Leave the image blank for a clean text-only card.
+  </p>
+  <p style="color:#666; font-size:0.9rem;">
     Prefer not to paste a token? Leave that field empty and use <strong>Generate Config</strong> → <strong>Download</strong> to update the file manually instead — both paths still work.
   </p>
   <p style="color:#666; font-size:0.9rem;">
@@ -211,6 +214,10 @@ function renderRepoList(repos) {
           <div class="field-row">
             <input type="text" placeholder="Tags (comma-separated)" id="tags-${repo.id}" oninput="scheduleAutoCommit()" value="${repo.language || ''}">
           </div>
+          <div class="field-row">
+            <input type="text" placeholder="Year (e.g. 2025)" id="year-${repo.id}" oninput="scheduleAutoCommit()" value="${new Date(repo.updated_at).getFullYear()}" style="max-width: 120px;">
+            <input type="text" placeholder="Chart image URL (optional)" id="chart-${repo.id}" oninput="scheduleAutoCommit()" value="">
+          </div>
         </div>
       </div>
     </div>
@@ -252,13 +259,17 @@ function generateConfig(opts = {}) {
     const description = document.getElementById(`description-${id}`).value || '';
     const tagsRaw = document.getElementById(`tags-${id}`).value || '';
     const tags = tagsRaw.split(',').map(t => t.trim()).filter(Boolean);
+    const yearVal = document.getElementById(`year-${id}`)?.value.trim() || '';
+    const chartVal = document.getElementById(`chart-${id}`)?.value.trim() || '';
 
     return {
       name: displayName,
       repo: repo.name,
       path: "",
       description: description,
-      tags: tags.length ? tags : ["Project"]
+      tags: tags.length ? tags : ["Project"],
+      year: yearVal,
+      chart: chartVal
     };
   });
 
