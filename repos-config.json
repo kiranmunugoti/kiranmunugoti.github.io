@@ -9,6 +9,15 @@
       "tags": [
         "JavaScript"
       ]
+    },
+    {
+      "name": "Work-and-portfolio",
+      "repo": "Work-and-portfolio",
+      "path": "",
+      "description": "Contains the project work and some personal project ideas.",
+      "tags": [
+        "Python"
+      ]
     }
   ]
 }
