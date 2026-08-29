@@ -55,6 +55,17 @@
       ],
       "year": "2026",
       "chart": "https://raw.githubusercontent.com/kiranmunugoti/Work-and-portfolio/main/03-churn-segmentation/churn_model_chart.png"
+    },
+    {
+      "name": "04-fraud-detection",
+      "repo": "Work-and-portfolio",
+      "path": "04-fraud-detection",
+      "description": "",
+      "tags": [
+        "Python"
+      ],
+      "year": "2026",
+      "chart": "https://raw.githubusercontent.com/kiranmunugoti/Work-and-portfolio/main/04-fraud-detection/fraud_model_chart.png"
     }
   ]
 }
