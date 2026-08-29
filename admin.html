@@ -161,7 +161,8 @@
 
 <script>
 let allRepos = [];
-let selectedRepos = {}; // keyed by repo full_name
+let selectedRepos = {}; // keyed by composite key: fullName for top-level, fullName::path for subfolders
+                          // value: { repoId, path }
 
 async function loadRepos() {
   const username = document.getElementById('username').value.trim();
@@ -198,43 +199,105 @@ async function loadRepos() {
   }
 }
 
+// Sanitizes a composite key (which may contain slashes/colons) into something
+// safe to use inside an HTML id attribute.
+function safeId(key) {
+  return key.replace(/[^a-zA-Z0-9_-]/g, '_');
+}
+
+function editableFieldsHTML(uid, defaults) {
+  return `
+    <div class="selected-config visible" id="config-${uid}">
+      <div class="field-row">
+        <input type="text" placeholder="Display name" id="displayname-${uid}" oninput="scheduleAutoCommit()" value="${escapeHtml(defaults.name)}">
+      </div>
+      <div class="field-row">
+        <input type="text" placeholder="Description" id="description-${uid}" oninput="scheduleAutoCommit()" value="${escapeHtml(defaults.description || '')}">
+      </div>
+      <div class="field-row">
+        <input type="text" placeholder="Tags (comma-separated)" id="tags-${uid}" oninput="scheduleAutoCommit()" value="${escapeHtml(defaults.tags || '')}">
+      </div>
+      <div class="field-row">
+        <input type="text" placeholder="Year (e.g. 2025)" id="year-${uid}" oninput="scheduleAutoCommit()" value="${defaults.year || ''}" style="max-width: 120px;">
+        <input type="text" placeholder="Image URL (auto-detected if found)" id="chart-${uid}" oninput="scheduleAutoCommit()" value="">
+      </div>
+      <div class="status" id="image-status-${uid}" style="margin-top: 0.3rem;"></div>
+    </div>
+  `;
+}
+
 function renderRepoList(repos) {
   const list = document.getElementById('repo-list');
   list.innerHTML = repos.map(repo => `
-    <div class="repo-row" data-name="${repo.name.toLowerCase()}">
-      <input type="checkbox" id="chk-${repo.id}" onchange="toggleRepo('${repo.full_name}', ${repo.id})">
-      <div class="repo-info">
-        <div class="repo-name">${repo.name}</div>
-        <div class="repo-desc">${repo.description ? escapeHtml(repo.description) : 'No description'}</div>
-        <div class="repo-meta">⭐ ${repo.stargazers_count} · ${repo.language || 'N/A'} · Updated ${new Date(repo.updated_at).toLocaleDateString()}</div>
-        <div class="selected-config" id="config-${repo.id}">
-          <div class="field-row">
-            <input type="text" placeholder="Display name" id="displayname-${repo.id}" oninput="scheduleAutoCommit()" value="${escapeHtml(repo.name)}">
-          </div>
-          <div class="field-row">
-            <input type="text" placeholder="Description" id="description-${repo.id}" oninput="scheduleAutoCommit()" value="${repo.description ? escapeHtml(repo.description) : ''}">
-          </div>
-          <div class="field-row">
-            <input type="text" placeholder="Tags (comma-separated)" id="tags-${repo.id}" oninput="scheduleAutoCommit()" value="${repo.language || ''}">
-          </div>
-          <div class="field-row">
-            <input type="text" placeholder="Year (e.g. 2025)" id="year-${repo.id}" oninput="scheduleAutoCommit()" value="${new Date(repo.updated_at).getFullYear()}" style="max-width: 120px;">
-            <input type="text" placeholder="Image URL (auto-detected if found)" id="chart-${repo.id}" oninput="scheduleAutoCommit()" value="">
-          </div>
-          <div class="status" id="image-status-${repo.id}" style="margin-top: 0.3rem;"></div>
+    <div class="repo-row" data-name="${repo.name.toLowerCase()}" style="flex-direction: column; align-items: stretch;">
+      <div style="display:flex; gap:0.75rem; align-items:flex-start;">
+        <input type="checkbox" id="chk-${repo.id}" onchange="toggleRepo('${repo.full_name}', ${repo.id})">
+        <div class="repo-info">
+          <div class="repo-name">${repo.name}</div>
+          <div class="repo-desc">${repo.description ? escapeHtml(repo.description) : 'No description'}</div>
+          <div class="repo-meta">⭐ ${repo.stargazers_count} · ${repo.language || 'N/A'} · Updated ${new Date(repo.updated_at).toLocaleDateString()}</div>
+          <a href="#" onclick="loadSubfolders('${repo.full_name}', ${repo.id}); return false;" style="font-size:0.82rem; color:#3498db; text-decoration:none;" id="subfolder-toggle-${repo.id}">📁 Check for individual project folders inside this repo</a>
+          ${editableFieldsHTML(repo.id, { name: repo.name, description: repo.description, tags: repo.language || '', year: new Date(repo.updated_at).getFullYear() })}
         </div>
       </div>
+      <div id="subfolders-${repo.id}" style="margin-left: 2rem; margin-top: 0.5rem;"></div>
     </div>
   `).join('');
+
+  // Hide the per-repo config blocks until checked (editableFieldsHTML renders them visible by default)
+  document.querySelectorAll('.selected-config').forEach(el => el.classList.remove('visible'));
+}
+
+async function loadSubfolders(fullName, repoId) {
+  const repo = allRepos.find(r => r.id === repoId);
+  const toggle = document.getElementById(`subfolder-toggle-${repoId}`);
+  const container = document.getElementById(`subfolders-${repoId}`);
+  if (!repo || !container) return;
+
+  toggle.textContent = '📁 Checking for project folders...';
+
+  const owner = document.getElementById('username').value.trim();
+  const files = await listFolder(owner, repo.name, '');
+
+  if (!files) {
+    toggle.textContent = '⚠️ Could not read this repo\'s contents.';
+    return;
+  }
+
+  // A "project folder" is any top-level directory that isn't a common
+  // config/tooling folder — this covers monorepo layouts like 01-risk-scoring, etc.
+  const IGNORE_DIRS = ['.github', 'node_modules', 'public', 'assets', 'images', 'screenshots', 'docs', '.vscode', 'dist', 'build'];
+  const dirs = files.filter(f => f.type === 'dir' && !IGNORE_DIRS.includes(f.name.toLowerCase()));
+
+  if (!dirs.length) {
+    toggle.textContent = '📁 No separate project folders found in this repo.';
+    return;
+  }
+
+  toggle.textContent = `📁 Found ${dirs.length} folder(s) — check any to add as separate projects:`;
+  container.innerHTML = dirs.map(dir => {
+    const key = `${fullName}::${dir.name}`;
+    const uid = safeId(key);
+    return `
+      <div style="border-left: 2px solid #eee; padding-left: 0.75rem; margin-bottom: 0.5rem;">
+        <label style="display:flex; align-items:center; gap:0.5rem; font-weight:500;">
+          <input type="checkbox" id="chk-${uid}" onchange="toggleSubfolder('${fullName}', ${repoId}, '${dir.name}')">
+          ${dir.name}
+        </label>
+        ${editableFieldsHTML(uid, { name: dir.name, description: '', tags: repo.language || '', year: new Date(repo.updated_at).getFullYear() })}
+      </div>
+    `;
+  }).join('');
+  document.querySelectorAll(`#subfolders-${repoId} .selected-config`).forEach(el => el.classList.remove('visible'));
 }
 
 function toggleRepo(fullName, id) {
   const checkbox = document.getElementById(`chk-${id}`);
   const configDiv = document.getElementById(`config-${id}`);
   if (checkbox.checked) {
-    selectedRepos[fullName] = id;
+    selectedRepos[fullName] = { repoId: id, path: '' };
     configDiv.classList.add('visible');
-    autoDetectImage(id);
+    autoDetectImage(id, id, '');
   } else {
     delete selectedRepos[fullName];
     configDiv.classList.remove('visible');
@@ -243,9 +306,26 @@ function toggleRepo(fullName, id) {
   scheduleAutoCommit();
 }
 
+function toggleSubfolder(fullName, repoId, folderName) {
+  const key = `${fullName}::${folderName}`;
+  const uid = safeId(key);
+  const checkbox = document.getElementById(`chk-${uid}`);
+  const configDiv = document.getElementById(`config-${uid}`);
+  if (checkbox.checked) {
+    selectedRepos[key] = { repoId, path: folderName };
+    configDiv.classList.add('visible');
+    autoDetectImage(uid, repoId, folderName);
+  } else {
+    delete selectedRepos[key];
+    configDiv.classList.remove('visible');
+  }
+  document.getElementById('selected-count').textContent = `${Object.keys(selectedRepos).length} selected`;
+  scheduleAutoCommit();
+}
+
 // Folders to check, in priority order, and filename keywords that suggest a
 // "hero" image (result chart, screenshot, cover) over incidental images.
-const IMAGE_SEARCH_FOLDERS = ['', 'public', 'assets', 'images', 'screenshots', 'docs'];
+const IMAGE_SEARCH_SUBFOLDERS = ['', 'public', 'assets', 'images', 'screenshots', 'docs'];
 const IMAGE_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.webp', '.svg'];
 const PRIORITY_KEYWORDS = ['screenshot', 'chart', 'result', 'cover', 'preview', 'demo'];
 // Filenames to ignore even though they're images — icons/favicons aren't project visuals.
@@ -284,10 +364,10 @@ function pickBestImage(files) {
   return priority || images[0];
 }
 
-async function autoDetectImage(id) {
-  const repo = allRepos.find(r => r.id === id);
-  const statusEl = document.getElementById(`image-status-${id}`);
-  const chartInput = document.getElementById(`chart-${id}`);
+async function autoDetectImage(uid, repoId, basePath) {
+  const repo = allRepos.find(r => r.id === repoId);
+  const statusEl = document.getElementById(`image-status-${uid}`);
+  const chartInput = document.getElementById(`chart-${uid}`);
   if (!repo || !statusEl || !chartInput) return;
 
   statusEl.textContent = 'Looking for a project image...';
@@ -296,7 +376,8 @@ async function autoDetectImage(id) {
   const owner = document.getElementById('username').value.trim();
   const branch = repo.default_branch || 'main';
 
-  for (const folder of IMAGE_SEARCH_FOLDERS) {
+  for (const sub of IMAGE_SEARCH_SUBFOLDERS) {
+    const folder = basePath ? (sub ? `${basePath}/${sub}` : basePath) : sub;
     const files = await listFolder(owner, repo.name, folder);
     if (!files) continue;
     const best = pickBestImage(files);
@@ -331,21 +412,22 @@ function escapeHtml(str) {
 
 function generateConfig(opts = {}) {
   const username = document.getElementById('username').value.trim();
-  const repositories = Object.entries(selectedRepos).map(([fullName, id]) => {
-    const repo = allRepos.find(r => r.id === id);
-    const displayName = document.getElementById(`displayname-${id}`).value || repo.name;
-    const description = document.getElementById(`description-${id}`).value || '';
-    const tagsRaw = document.getElementById(`tags-${id}`).value || '';
+  const repositories = Object.entries(selectedRepos).map(([key, sel]) => {
+    const repo = allRepos.find(r => r.id === sel.repoId);
+    const uid = safeId(key);
+    const displayName = document.getElementById(`displayname-${uid}`)?.value || (sel.path || repo.name);
+    const description = document.getElementById(`description-${uid}`)?.value || '';
+    const tagsRaw = document.getElementById(`tags-${uid}`)?.value || '';
     const tags = tagsRaw.split(',').map(t => t.trim()).filter(Boolean);
-    const yearVal = document.getElementById(`year-${id}`)?.value.trim() || '';
-    const detectedOrManualChart = document.getElementById(`chart-${id}`)?.value.trim() || '';
+    const yearVal = document.getElementById(`year-${uid}`)?.value.trim() || '';
+    const detectedOrManualChart = document.getElementById(`chart-${uid}`)?.value.trim() || '';
     // Priority: auto-detected/manual image field -> GitHub's own repo preview image as last resort.
     const chartVal = detectedOrManualChart || `https://opengraph.githubassets.com/1/${username}/${repo.name}`;
 
     return {
       name: displayName,
       repo: repo.name,
-      path: "",
+      path: sel.path || "",
       description: description,
       tags: tags.length ? tags : ["Project"],
       year: yearVal,
