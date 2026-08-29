@@ -44,6 +44,17 @@
       ],
       "year": "2026",
       "chart": "https://raw.githubusercontent.com/kiranmunugoti/Work-and-portfolio/main/02-financial-forecasting/forecast_chart.png"
+    },
+    {
+      "name": "03-churn-segmentation",
+      "repo": "Work-and-portfolio",
+      "path": "03-churn-segmentation",
+      "description": "",
+      "tags": [
+        "Python"
+      ],
+      "year": "2026",
+      "chart": "https://raw.githubusercontent.com/kiranmunugoti/Work-and-portfolio/main/03-churn-segmentation/churn_model_chart.png"
     }
   ]
 }
