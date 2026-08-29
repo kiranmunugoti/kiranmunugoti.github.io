@@ -11,6 +11,17 @@
       ],
       "year": "2026",
       "chart": "https://opengraph.githubassets.com/1/kiranmunugoti/Work-and-portfolio"
+    },
+    {
+      "name": "hst-food-tracker",
+      "repo": "hst-food-tracker",
+      "path": "",
+      "description": "",
+      "tags": [
+        "JavaScript"
+      ],
+      "year": "2026",
+      "chart": "https://raw.githubusercontent.com/kiranmunugoti/hst-food-tracker/main/public/screenshot.png"
     }
   ]
 }
