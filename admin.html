@@ -146,7 +146,10 @@
     <li>No buttons to click, nothing to download or upload — watch the "Auto-saving..." status turn into "✅ Auto-saved"</li>
   </ol>
   <p style="color:#666; font-size:0.9rem;">
-    For each checked repo, you can also set a <strong>Year</strong> and an optional <strong>chart image URL</strong> (a link to any image — a screenshot, a chart export, etc.) to make the card match your original curated style. Leave the image blank for a clean text-only card.
+    For each checked repo, you can set a <strong>Year</strong>. The project image is auto-detected — no work needed for most repos.
+  </p>
+  <p style="color:#666; font-size:0.9rem;">
+    <strong>Where it looks:</strong> repo root → <code>public/</code> → <code>assets/</code> → <code>images/</code> → <code>screenshots/</code> → <code>docs/</code> (first match wins). Within a folder, filenames containing <code>screenshot</code>, <code>chart</code>, <code>result</code>, <code>cover</code>, <code>preview</code>, or <code>demo</code> are preferred; <code>icon</code>/<code>favicon</code>/<code>logo</code> files are ignored. <strong>Tip for new repos:</strong> drop your main project visual in <code>public/</code> or <code>assets/</code> named something like <code>screenshot.png</code> or <code>results-chart.png</code> to guarantee it's picked up. If nothing is found, GitHub's auto-generated repo preview image is used as a fallback, and you can always override with a manual URL.
   </p>
   <p style="color:#666; font-size:0.9rem;">
     Prefer not to paste a token? Leave that field empty and use <strong>Generate Config</strong> → <strong>Download</strong> to update the file manually instead — both paths still work.
@@ -216,8 +219,9 @@ function renderRepoList(repos) {
           </div>
           <div class="field-row">
             <input type="text" placeholder="Year (e.g. 2025)" id="year-${repo.id}" oninput="scheduleAutoCommit()" value="${new Date(repo.updated_at).getFullYear()}" style="max-width: 120px;">
-            <input type="text" placeholder="Chart image URL (optional)" id="chart-${repo.id}" oninput="scheduleAutoCommit()" value="">
+            <input type="text" placeholder="Image URL (auto-detected if found)" id="chart-${repo.id}" oninput="scheduleAutoCommit()" value="">
           </div>
+          <div class="status" id="image-status-${repo.id}" style="margin-top: 0.3rem;"></div>
         </div>
       </div>
     </div>
@@ -230,12 +234,86 @@ function toggleRepo(fullName, id) {
   if (checkbox.checked) {
     selectedRepos[fullName] = id;
     configDiv.classList.add('visible');
+    autoDetectImage(id);
   } else {
     delete selectedRepos[fullName];
     configDiv.classList.remove('visible');
   }
   document.getElementById('selected-count').textContent = `${Object.keys(selectedRepos).length} selected`;
   scheduleAutoCommit();
+}
+
+// Folders to check, in priority order, and filename keywords that suggest a
+// "hero" image (result chart, screenshot, cover) over incidental images.
+const IMAGE_SEARCH_FOLDERS = ['', 'public', 'assets', 'images', 'screenshots', 'docs'];
+const IMAGE_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.webp', '.svg'];
+const PRIORITY_KEYWORDS = ['screenshot', 'chart', 'result', 'cover', 'preview', 'demo'];
+// Filenames to ignore even though they're images — icons/favicons aren't project visuals.
+const IGNORE_KEYWORDS = ['icon', 'favicon', 'logo', 'apple-touch'];
+
+function authHeaders() {
+  const token = document.getElementById('gh-token').value.trim();
+  const headers = { 'Accept': 'application/vnd.github+json' };
+  if (token) headers['Authorization'] = `Bearer ${token}`;
+  return headers;
+}
+
+async function listFolder(owner, repoName, folderPath) {
+  try {
+    const url = `https://api.github.com/repos/${owner}/${repoName}/contents/${folderPath}`;
+    const res = await fetch(url, { headers: authHeaders() });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return Array.isArray(data) ? data : null;
+  } catch {
+    return null;
+  }
+}
+
+function pickBestImage(files) {
+  const images = files.filter(f => {
+    const lower = f.name.toLowerCase();
+    if (!IMAGE_EXTENSIONS.some(ext => lower.endsWith(ext))) return false;
+    if (IGNORE_KEYWORDS.some(kw => lower.includes(kw))) return false;
+    return true;
+  });
+  if (!images.length) return null;
+
+  // Prefer filenames matching priority keywords; otherwise take the first image found.
+  const priority = images.find(f => PRIORITY_KEYWORDS.some(kw => f.name.toLowerCase().includes(kw)));
+  return priority || images[0];
+}
+
+async function autoDetectImage(id) {
+  const repo = allRepos.find(r => r.id === id);
+  const statusEl = document.getElementById(`image-status-${id}`);
+  const chartInput = document.getElementById(`chart-${id}`);
+  if (!repo || !statusEl || !chartInput) return;
+
+  statusEl.textContent = 'Looking for a project image...';
+  statusEl.className = 'status';
+
+  const owner = document.getElementById('username').value.trim();
+  const branch = repo.default_branch || 'main';
+
+  for (const folder of IMAGE_SEARCH_FOLDERS) {
+    const files = await listFolder(owner, repo.name, folder);
+    if (!files) continue;
+    const best = pickBestImage(files);
+    if (best) {
+      const rawUrl = `https://raw.githubusercontent.com/${owner}/${repo.name}/${branch}/${folder ? folder + '/' : ''}${best.name}`;
+      chartInput.value = rawUrl;
+      statusEl.textContent = `✓ Found image: ${folder ? folder + '/' : ''}${best.name}`;
+      statusEl.className = 'status success';
+      scheduleAutoCommit();
+      return;
+    }
+  }
+
+  // Nothing found — leave the field blank; generateConfig() already falls back
+  // to GitHub's auto-generated repo preview image in this case.
+  statusEl.textContent = 'No project image found — will use GitHub\'s auto-preview instead.';
+  statusEl.className = 'status';
 }
 
 function filterRepos() {
@@ -260,7 +338,9 @@ function generateConfig(opts = {}) {
     const tagsRaw = document.getElementById(`tags-${id}`).value || '';
     const tags = tagsRaw.split(',').map(t => t.trim()).filter(Boolean);
     const yearVal = document.getElementById(`year-${id}`)?.value.trim() || '';
-    const chartVal = document.getElementById(`chart-${id}`)?.value.trim() || '';
+    const detectedOrManualChart = document.getElementById(`chart-${id}`)?.value.trim() || '';
+    // Priority: auto-detected/manual image field -> GitHub's own repo preview image as last resort.
+    const chartVal = detectedOrManualChart || `https://opengraph.githubassets.com/1/${username}/${repo.name}`;
 
     return {
       name: displayName,
