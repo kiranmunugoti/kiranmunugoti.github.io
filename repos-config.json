@@ -33,6 +33,17 @@
       ],
       "year": "2026",
       "chart": "https://raw.githubusercontent.com/kiranmunugoti/Work-and-portfolio/main/01-risk-scoring/risk_scores_chart.png"
+    },
+    {
+      "name": "02-financial-forecasting",
+      "repo": "Work-and-portfolio",
+      "path": "02-financial-forecasting",
+      "description": "",
+      "tags": [
+        "Python"
+      ],
+      "year": "2026",
+      "chart": "https://raw.githubusercontent.com/kiranmunugoti/Work-and-portfolio/main/02-financial-forecasting/forecast_chart.png"
     }
   ]
 }
