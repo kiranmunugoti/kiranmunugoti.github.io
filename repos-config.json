@@ -11,6 +11,17 @@
       ],
       "year": "2026",
       "chart": "https://raw.githubusercontent.com/kiranmunugoti/hst-food-tracker/main/public/screenshot.png"
+    },
+    {
+      "name": "Work-and-portfolio",
+      "repo": "Work-and-portfolio",
+      "path": "",
+      "description": "Contains the project work and some personal project ideas.",
+      "tags": [
+        "Python"
+      ],
+      "year": "2026",
+      "chart": "https://opengraph.githubassets.com/1/kiranmunugoti/Work-and-portfolio"
     }
   ]
 }
