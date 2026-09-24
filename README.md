@@ -40,6 +40,7 @@ My portfolio showcases four key data science projects with complete code, docume
 3. **Customer Churn Segmentation** — Identifying at-risk customer segments for retention strategies
 4. **Fraud Detection** — Real-time anomaly detection and classification for transaction monitoring
 
+My personal project with can be found in the portfolio website along with the other projects 
 **Explore the projects**: [Work-and-portfolio Repository](https://github.com/kiranmunugoti/Work-and-portfolio)
 
 Each project includes:
