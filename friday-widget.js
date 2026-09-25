@@ -8,7 +8,7 @@
 
   var CONFIG = {
     apiUrl: "https://friday-chatbot.vercel.app/api/chat", // your Vercel proxy
-    emailjs: { serviceId: "YOUR_SERVICE_ID", templateId: "YOUR_TEMPLATE_ID", publicKey: "YOUR_PUBLIC_KEY" },
+    emailjs: { serviceId: "service_pcj1wid", templateId: "template_v0.1", publicKey: "2suNVYu0GYK2JyZW1" },
     welcome: "Hello, I am Friday, Sai Kiran's AI assistant. How can I help you today?",
     suggestions: ["What's Sai's experience?", "What projects has he built?", "Is he open to new roles?"],
     links: [
