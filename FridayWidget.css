@@ -1,0 +1,207 @@
+.fw-root {
+  --fw-bg: #000000;
+  --fw-surface: #131314;
+  --fw-border: #2a2a2d;
+  --fw-text: #e3e3e3;
+  --fw-muted: #9aa0a6;
+  --fw-grad: conic-gradient(from 0deg, #4285f4, #9b72cb, #d96570, #f4b400, #4285f4);
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 9999;
+  font-family: "Google Sans", "Inter", system-ui, sans-serif;
+}
+
+.fw-launcher {
+  width: 60px;
+  height: 60px;
+  border: none;
+  border-radius: 50%;
+  background: var(--fw-grad);
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.fw-panel {
+  position: absolute;
+  right: 0;
+  bottom: 76px;
+  width: 380px;
+  height: 580px;
+  max-height: calc(100vh - 120px);
+  display: flex;
+  flex-direction: column;
+  background: var(--fw-bg);
+  color: var(--fw-text);
+  border: 1px solid var(--fw-border);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  animation: fw-open 0.18s ease-out;
+}
+
+@keyframes fw-open {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+.fw-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--fw-border);
+}
+
+.fw-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--fw-grad);
+  animation: fw-spin 6s linear infinite;
+}
+
+@keyframes fw-spin { to { transform: rotate(360deg); } }
+
+.fw-name { font-weight: 500; font-size: 16px; }
+
+.fw-icon-btn {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: var(--fw-muted);
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.fw-log {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.fw-msg {
+  margin: 0;
+  max-width: 85%;
+  padding: 10px 14px;
+  border-radius: 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.fw-assistant { align-self: flex-start; background: var(--fw-surface); }
+.fw-user { align-self: flex-end; background: #1f3a68; }
+
+.fw-typing { display: flex; gap: 5px; }
+.fw-typing span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  animation: fw-bounce 1s infinite;
+}
+.fw-typing span:nth-child(1) { background: #4285f4; }
+.fw-typing span:nth-child(2) { background: #9b72cb; animation-delay: 0.15s; }
+.fw-typing span:nth-child(3) { background: #d96570; animation-delay: 0.3s; }
+
+@keyframes fw-bounce {
+  0%, 100% { transform: translateY(0); opacity: 0.5; }
+  50% { transform: translateY(-4px); opacity: 1; }
+}
+
+.fw-links { display: flex; gap: 8px; }
+.fw-links a {
+  padding: 6px 12px;
+  border: 1px solid var(--fw-border);
+  border-radius: 10px;
+  color: var(--fw-text);
+  font-size: 13px;
+  text-decoration: none;
+}
+.fw-links a:hover { border-color: #4285f4; }
+
+.fw-chips {
+  display: flex;
+  gap: 6px;
+  padding: 0 12px 10px;
+  overflow-x: auto;
+}
+.fw-chips button {
+  flex-shrink: 0;
+  padding: 6px 12px;
+  background: var(--fw-surface);
+  color: var(--fw-text);
+  border: 1px solid var(--fw-border);
+  border-radius: 14px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.fw-chips .fw-chip-lead { border-color: #9b72cb; }
+
+.fw-input,
+.fw-lead {
+  display: flex;
+  gap: 8px;
+}
+.fw-input {
+  padding: 12px;
+  border-top: 1px solid var(--fw-border);
+}
+.fw-lead {
+  flex-direction: column;
+  padding: 12px;
+  background: var(--fw-surface);
+  border-radius: 14px;
+}
+
+.fw-input input,
+.fw-lead input,
+.fw-lead textarea {
+  flex: 1;
+  padding: 10px 12px;
+  background: var(--fw-surface);
+  color: var(--fw-text);
+  border: 1px solid var(--fw-border);
+  border-radius: 12px;
+  font: inherit;
+  font-size: 14px;
+}
+.fw-lead input,
+.fw-lead textarea { background: var(--fw-bg); }
+
+.fw-input button,
+.fw-lead button {
+  padding: 10px 16px;
+  background: #4285f4;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.fw-input button:disabled,
+.fw-lead button:disabled { opacity: 0.5; cursor: default; }
+
+.fw-error { margin: 0; color: #f28b82; font-size: 12px; }
+
+.fw-root button:focus-visible,
+.fw-root input:focus-visible,
+.fw-root textarea:focus-visible,
+.fw-root a:focus-visible {
+  outline: 2px solid #4285f4;
+  outline-offset: 2px;
+}
+
+@media (max-width: 480px) {
+  .fw-root { right: 12px; bottom: 12px; }
+  .fw-panel { width: calc(100vw - 24px); bottom: 72px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fw-avatar, .fw-typing span, .fw-panel { animation: none; }
+}
