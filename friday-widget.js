@@ -5,7 +5,14 @@
 */
 (function () {
   "use strict";
-
+  
+  // Always start at the top on load/refresh so the hero and DS are in view.
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+  window.addEventListener("load", function () {
+    if (location.hash) history.replaceState(null, "", location.pathname + location.search);
+    window.scrollTo(0, 0);
+  });
+  
   var CONFIG = {
     apiUrl: "https://sai-friday-aibot.vercel.app/api/chat", // your Vercel proxy
     emailjs: { serviceId: "service_pcj1wid", templateId: "template_v0.1", publicKey: "2suNVYu0GYK2JyZW1" },
