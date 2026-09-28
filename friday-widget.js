@@ -23,7 +23,7 @@
       { label: "LinkedIn", href: "https://www.linkedin.com/in/mr-kiran" }
     ],
     trigger: ".hero-bg-text",   // the big "DS" in the hero opens Friday
-    triggerText: "Friday",
+    triggerText: "DS",
     launcherText: "SF",         // text on the round launcher button
     autoOpen: "always",         // "always" = every page load, "session" = once per visit, "off"
     autoOpenDelay: 1800         // ms; lets the DS fade-in finish first
