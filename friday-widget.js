@@ -7,14 +7,17 @@
   "use strict";
 
   var CONFIG = {
-    apiUrl: "https://sai-friday-aibot.vercel.app/", // your Vercel proxy
+    apiUrl: "https://sai-friday-aibot.vercel.app/api/chat", // your Vercel proxy
     emailjs: { serviceId: "service_pcj1wid", templateId: "template_v0.1", publicKey: "2suNVYu0GYK2JyZW1" },
     welcome: "Hello, I am Friday, Sai Kiran's AI assistant. How can I help you today?",
     suggestions: ["What's Sai's experience?", "What projects has he built?", "Is he open to new roles?"],
     links: [
       { label: "Portfolio", href: "https://kiranmunugoti.github.io/" },
       { label: "LinkedIn", href: "https://www.linkedin.com/in/mr-kiran" }
-    ]
+    ],
+    trigger: ".hero-bg-text",   // the big "DS" in the hero opens Friday
+    autoOpen: "always",         // "always" = every page load, "session" = once per visit, "off"
+    autoOpenDelay: 1800         // ms; lets the DS fade-in finish first
   };
 
   var CSS = [
@@ -45,6 +48,9 @@
     ".fw-btn{padding:10px 16px;background:#4285f4;color:#fff;border:none;border-radius:12px;font-size:14px;cursor:pointer}.fw-btn:disabled{opacity:.5;cursor:default}",
     ".fw-err{margin:0;color:#f28b82;font-size:12px}",
     ".fw-root button:focus-visible,.fw-root input:focus-visible,.fw-root textarea:focus-visible,.fw-root a:focus-visible{outline:2px solid #4285f4;outline-offset:2px}",
+    ".fw-trigger{pointer-events:auto!important;cursor:pointer;transition:filter .2s}",
+    ".fw-trigger:hover,.fw-trigger:focus-visible{filter:brightness(1.8);outline:none}",
+    ".fw-launch.fw-hide{display:none}",
     "@media(max-width:480px){.fw-root{right:12px;bottom:12px}.fw-panel{width:calc(100vw - 24px);bottom:72px}}",
     "@media(prefers-reduced-motion:reduce){.fw-av,.fw-dots span{animation:none}}"
   ].join("");
@@ -92,17 +98,56 @@
     panel.appendChild(head); panel.appendChild(log); panel.appendChild(chips); panel.appendChild(form);
 
     var launch = el("button", { "class": "fw-launch", "aria-label": "Chat with Friday" }, "✦");
-    function toggle(open) {
+    function toggle(open, focus) {
       panel.classList.toggle("open", open);
       launch.textContent = open ? "✕" : "✦";
       launch.setAttribute("aria-label", open ? "Close chat" : "Chat with Friday");
-      if (open) input.focus();
+      if (open && focus !== false) input.focus();
     }
     launch.onclick = function () { toggle(!panel.classList.contains("open")); };
     close.onclick = function () { toggle(false); };
 
     root.appendChild(panel); root.appendChild(launch);
     document.body.appendChild(root);
+
+    // The "DS" in the hero opens Friday. The round launcher only shows when
+    // DS is off screen (scrolled past) or hidden (the site hides it on mobile).
+    var trigger = CONFIG.trigger && document.querySelector(CONFIG.trigger);
+    if (trigger) {
+      trigger.classList.add("fw-trigger");
+      trigger.setAttribute("role", "button");
+      trigger.setAttribute("tabindex", "0");
+      trigger.setAttribute("aria-label", "Chat with Friday");
+      trigger.onclick = function () { toggle(!panel.classList.contains("open")); };
+      trigger.onkeydown = function (e) {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); trigger.onclick(); }
+      };
+      var syncLauncher = function (onScreen) {
+        var shown = getComputedStyle(trigger).display !== "none";
+        launch.classList.toggle("fw-hide", shown && onScreen);
+      };
+      if ("IntersectionObserver" in window) {
+        new IntersectionObserver(function (entries) {
+          syncLauncher(entries[0].isIntersecting);
+        }).observe(trigger);
+      }
+      window.addEventListener("resize", function () {
+        var r = trigger.getBoundingClientRect();
+        syncLauncher(r.bottom > 0 && r.top < window.innerHeight);
+      });
+    }
+
+    // Pop Friday open when the page loads or is refreshed.
+    var shouldOpen = CONFIG.autoOpen === "always";
+    if (CONFIG.autoOpen === "session") {
+      try {
+        shouldOpen = !sessionStorage.getItem("fw-opened");
+        sessionStorage.setItem("fw-opened", "1");
+      } catch (e) { shouldOpen = true; }
+    }
+    if (shouldOpen) {
+      setTimeout(function () { toggle(true, false); }, CONFIG.autoOpenDelay);
+    }
 
     addMsg("assistant", CONFIG.welcome, false);
     var links = el("div", { "class": "fw-links" });
