@@ -23,6 +23,7 @@
       { label: "LinkedIn", href: "https://www.linkedin.com/in/mr-kiran" }
     ],
     trigger: ".hero-bg-text",   // the big "DS" in the hero opens Friday
+    triggerText: "Friday", 
     autoOpen: "always",         // "always" = every page load, "session" = once per visit, "off"
     autoOpenDelay: 1800         // ms; lets the DS fade-in finish first
   };
@@ -45,8 +46,8 @@
     ".fw-dots span:nth-child(1){background:#4285f4}.fw-dots span:nth-child(2){background:#9b72cb;animation-delay:.15s}.fw-dots span:nth-child(3){background:#d96570;animation-delay:.3s}",
     "@keyframes fw-b{0%,100%{transform:none;opacity:.5}50%{transform:translateY(-4px);opacity:1}}",
     ".fw-links{display:flex;gap:8px}.fw-links a{padding:6px 12px;border:1px solid var(--bd);border-radius:10px;color:var(--tx);font-size:13px;text-decoration:none}",
-    ".fw-chips{display:flex;gap:6px;padding:0 12px 10px;overflow-x:auto}",
-    ".fw-chips button{flex-shrink:0;padding:6px 12px;background:var(--sf);color:var(--tx);border:1px solid var(--bd);border-radius:14px;font-size:12px;cursor:pointer}",
+    ".fw-chips{display:flex;flex-wrap:wrap;gap:6px;padding:0 12px 10px}",
+    ".fw-chips button{padding:6px 12px;background:var(--sf);color:var(--tx);border:1px solid var(--bd);border-radius:14px;font-size:12px;cursor:pointer}",
     ".fw-chips .fw-lead-chip{border-color:#9b72cb}",
     ".fw-in{display:flex;gap:8px;padding:12px;border-top:1px solid var(--bd)}",
     ".fw-lead{display:flex;flex-direction:column;gap:8px;padding:12px;background:var(--sf);border-radius:14px}",
@@ -56,7 +57,8 @@
     ".fw-err{margin:0;color:#f28b82;font-size:12px}",
     ".fw-root button:focus-visible,.fw-root input:focus-visible,.fw-root textarea:focus-visible,.fw-root a:focus-visible{outline:2px solid #4285f4;outline-offset:2px}",
     ".fw-trigger{pointer-events:auto!important;cursor:pointer;transition:filter .2s}",
-    ".fw-trigger:hover,.fw-trigger:focus-visible{filter:brightness(1.8);outline:none}",
+    ".hero-bg-text.fw-trigger{font-size:clamp(5rem,11vw,11rem);right:4rem;background:linear-gradient(90deg,rgba(66,133,244,.45),rgba(155,114,203,.45),rgba(217,101,112,.45));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;transition:background .3s}",
+    ".hero-bg-text.fw-trigger:hover,.hero-bg-text.fw-trigger:focus-visible{background:linear-gradient(90deg,#4285f4,#9b72cb,#d96570);-webkit-background-clip:text;background-clip:text;outline:none}",
     ".fw-launch.fw-hide{display:none}",
     "@media(max-width:480px){.fw-root{right:12px;bottom:12px}.fw-panel{width:calc(100vw - 24px);bottom:72px}}",
     "@media(prefers-reduced-motion:reduce){.fw-av,.fw-dots span{animation:none}}"
@@ -121,6 +123,7 @@
     // DS is off screen (scrolled past) or hidden (the site hides it on mobile).
     var trigger = CONFIG.trigger && document.querySelector(CONFIG.trigger);
     if (trigger) {
+            if (CONFIG.triggerText) trigger.textContent = CONFIG.triggerText;
       trigger.classList.add("fw-trigger");
       trigger.setAttribute("role", "button");
       trigger.setAttribute("tabindex", "0");
