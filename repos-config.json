@@ -13,7 +13,8 @@
         "Power BI"
       ],
       "year": "2025",
-      "chart": "https://raw.githubusercontent.com/kiranmunugoti/Work-and-portfolio/main/01-risk-scoring/risk_scores_chart.png"
+      "chart": "https://raw.githubusercontent.com/kiranmunugoti/Work-and-portfolio/main/01-risk-scoring/risk_scores_chart.png",
+      "addToResumeProjects": false
     },
     {
       "name": "Financial Risk Forecasting Pipeline",
@@ -27,7 +28,8 @@
         "Ensemble ML"
       ],
       "year": "2025",
-      "chart": "https://raw.githubusercontent.com/kiranmunugoti/Work-and-portfolio/main/02-financial-forecasting/forecast_chart.png"
+      "chart": "https://raw.githubusercontent.com/kiranmunugoti/Work-and-portfolio/main/02-financial-forecasting/forecast_chart.png",
+      "addToResumeProjects": false
     },
     {
       "name": "Churn Prediction & Risk Segmentation",
@@ -41,7 +43,8 @@
         "ETL"
       ],
       "year": "2024",
-      "chart": "https://raw.githubusercontent.com/kiranmunugoti/Work-and-portfolio/main/03-churn-segmentation/churn_model_chart.png"
+      "chart": "https://raw.githubusercontent.com/kiranmunugoti/Work-and-portfolio/main/03-churn-segmentation/churn_model_chart.png",
+      "addToResumeProjects": false
     },
     {
       "name": "Healthcare Claims Fraud Detection",
@@ -55,7 +58,8 @@
         "Healthcare"
       ],
       "year": "2022",
-      "chart": "https://raw.githubusercontent.com/kiranmunugoti/Work-and-portfolio/main/04-fraud-detection/fraud_model_chart.png"
+      "chart": "https://raw.githubusercontent.com/kiranmunugoti/Work-and-portfolio/main/04-fraud-detection/fraud_model_chart.png",
+      "addToResumeProjects": false
     },
     {
       "name": "HST Ingredient Tracker",
@@ -69,7 +73,8 @@
         "Ingredient/Additive Taxonomy"
       ],
       "year": "2026",
-      "chart": "https://raw.githubusercontent.com/kiranmunugoti/hst-food-tracker/main/public/screenshot.png"
+      "chart": "https://raw.githubusercontent.com/kiranmunugoti/hst-food-tracker/main/public/screenshot.png",
+      "addToResumeProjects": true
     }
   ]
 }
