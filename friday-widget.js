@@ -152,7 +152,10 @@
     if (window.visualViewport) {
       var syncPanelHeight = function () {
         var vh = window.visualViewport.height;
-        panel.style.maxHeight = Math.min(580, vh - 32) + "px";
+        // 190px matches the original CSS buffer (launcher button, bottom spacing,
+        // panel header) — using a smaller margin here let the panel grow taller
+        // than the screen on shorter laptop viewports, pushing the header off-screen.
+        panel.style.maxHeight = Math.min(580, vh - 190) + "px";
       };
       window.visualViewport.addEventListener("resize", syncPanelHeight);
       syncPanelHeight();
