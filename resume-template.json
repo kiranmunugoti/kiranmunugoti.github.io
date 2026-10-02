@@ -1,21 +1,51 @@
 {
   "name": "Sai Kiran Munugoti",
-  "contact": "kiranmunugotis@gmail.com | +1-612-212-2849 | linkedin.com/in/mr-kiran | Eagan, MN",
+  "contact": "kiranmunugotis@gmail.com | +1-612-212-2849 | linkedin.com/in/mr-kiran | kiranmunugoti.github.io | Eagan, MN",
   "summary": "Data Scientist with 7+ years of experience building predictive models, quantitative risk frameworks, and analytical pipelines across financial services, insurance, and operations. Core work spans multi-source data integration, machine learning model development and validation, and translating outputs into prioritization tools and dashboards for operational and executive decision-making. Experienced working in cross-functional environments where models must be explainable, traceable, and tied to measurable business outcomes.",
   "technicalSkills": [
-    { "label": "Languages", "value": "Python (Pandas, NumPy, Scikit-learn, Matplotlib, Seaborn), R, SQL" },
-    { "label": "Machine Learning", "value": "Logistic Regression, Random Forest, XGBoost, Gradient Boosting, Survival Analysis, Bayesian Methods, K-Means Clustering, Neural Networks" },
-    { "label": "Risk & Analytics", "value": "Quantitative risk scoring, event likelihood/consequence modeling, anomaly detection, time-to-event modeling, scenario analysis" },
-    { "label": "Forecasting", "value": "ARIMA, Prophet, time-series modeling, feature engineering, hyperparameter tuning" },
-    { "label": "Data Engineering", "value": "ETL pipeline development, data quality validation, Azure Data Factory, AWS Redshift, Snowflake, SSIS, Talend, PySpark, PostgreSQL" },
-    { "label": "Visualization", "value": "Power BI, Tableau, Matplotlib, Seaborn, RShiny, QuickSight" },
-    { "label": "Geospatial", "value": "ArcGIS, GeoPandas, spatiotemporal analysis" },
-    { "label": "Cloud & MLOps", "value": "AWS SageMaker, Azure, Google Cloud, model validation, drift monitoring, Great Expectations" },
-    { "label": "Other", "value": "JIRA, Agile methodology, Blue Prism RPA, Salesforce, SAP, API Integration, Data Parsing" }
+    {
+      "label": "Languages",
+      "value": "Python (Pandas, NumPy, Scikit-learn, Matplotlib, Seaborn), R, SQL"
+    },
+    {
+      "label": "Machine Learning",
+      "value": "Logistic Regression, Random Forest, XGBoost, Gradient Boosting, Survival Analysis, Bayesian Methods, K-Means Clustering, Neural Networks"
+    },
+    {
+      "label": "Risk & Analytics",
+      "value": "Quantitative risk scoring, event likelihood/consequence modeling, anomaly detection, time-to-event modeling, scenario analysis"
+    },
+    {
+      "label": "Forecasting",
+      "value": "ARIMA, Prophet, time-series modeling, feature engineering, hyperparameter tuning"
+    },
+    {
+      "label": "Data Engineering",
+      "value": "ETL pipeline development, data quality validation, Azure Data Factory, AWS Redshift, Snowflake, SSIS, Talend, PySpark, PostgreSQL"
+    },
+    {
+      "label": "Visualization",
+      "value": "Power BI, Tableau, Matplotlib, Seaborn, RShiny, QuickSight"
+    },
+    {
+      "label": "Geospatial",
+      "value": "ArcGIS, GeoPandas, spatiotemporal analysis"
+    },
+    {
+      "label": "Cloud & MLOps",
+      "value": "AWS SageMaker, Azure, Google Cloud, model validation, drift monitoring, Great Expectations"
+    },
+    {
+      "label": "Other",
+      "value": "JIRA, Agile methodology, Blue Prism RPA, Salesforce, SAP, API Integration, Data Parsing"
+    }
   ],
   "experience": [
     {
-      "title": "Data Scientist", "company": "RB Management LLC", "dateRange": "Dec 2025 – Present", "location": "Remote, USA",
+      "title": "Data Scientist",
+      "company": "RB Management LLC",
+      "dateRange": "Dec 2025 \u2013 Present",
+      "location": "Remote, USA",
       "bullets": [
         "Designed multi-dimensional risk scoring models integrating operational, financial, and behavioral data from hotel PMS, POS, CRM, and booking platforms using Azure Data Factory and SQL.",
         "Built anomaly detection and forecasting models to identify emerging risk patterns across a multi-property hotel portfolio, enabling proactive operational interventions.",
@@ -25,7 +55,10 @@
       ]
     },
     {
-      "title": "Data Scientist", "company": "Cognitum Solutions LLC", "dateRange": "Apr 2025 – Dec 2025", "location": "Remote, USA",
+      "title": "Data Scientist",
+      "company": "Cognitum Solutions LLC",
+      "dateRange": "Apr 2025 \u2013 Dec 2025",
+      "location": "Remote, USA",
       "bullets": [
         "Built time-series forecasting models using ARIMA and Prophet to support financial risk planning; improved forecast accuracy through iterative feature engineering and model calibration.",
         "Conducted root-cause analysis on security incidents and produced visual risk summaries for executive review, including trend identification and anomaly flagging.",
@@ -35,7 +68,10 @@
       ]
     },
     {
-      "title": "Data Scientist", "company": "Protek Talent Inc", "dateRange": "Feb 2024 – Apr 2025", "location": "Remote, USA",
+      "title": "Data Scientist",
+      "company": "Protek Talent Inc",
+      "dateRange": "Feb 2024 \u2013 Apr 2025",
+      "location": "Remote, USA",
       "bullets": [
         "Built customer churn prediction models using Logistic Regression and XGBoost, achieving 87% accuracy on noisy, multi-source operational data.",
         "Automated ETL workflows for financial data ingestion, transformation, and validation, reducing pipeline processing time by 40% and improving risk analysis throughput.",
@@ -45,7 +81,10 @@
       ]
     },
     {
-      "title": "Data Scientist", "company": "Genpact India Pvt. Ltd. (Cigna Healthcare)", "dateRange": "Jun 2021 – Aug 2022", "location": "Bengaluru, India",
+      "title": "Data Scientist",
+      "company": "Genpact India Pvt. Ltd. (Cigna Healthcare)",
+      "dateRange": "Jun 2021 \u2013 Aug 2022",
+      "location": "Bengaluru, India",
       "bullets": [
         "Developed predictive models to identify high-risk insurance claims and potential fraud patterns, contributing to a 68% improvement in fraud detection rates and 30% reduction in associated operational costs.",
         "Integrated multi-source healthcare data (claims, provider networks, member services) via SQL and Azure Data Factory, improving data quality and downstream analytics reliability for compliance reporting.",
@@ -55,7 +94,10 @@
       ]
     },
     {
-      "title": "Data Analyst", "company": "SequelSoft India Limited", "dateRange": "Apr 2018 – Jun 2021", "location": "Hyderabad, India",
+      "title": "Data Analyst",
+      "company": "SequelSoft India Limited",
+      "dateRange": "Apr 2018 \u2013 Jun 2021",
+      "location": "Hyderabad, India",
       "bullets": [
         "Built ETL pipelines using Talend and AWS Redshift, improving data transformation accuracy and reporting reliability by 25% across financial and operational data domains.",
         "Developed Power BI and Tableau dashboards to support business performance tracking across inventory, sales, and returns reporting.",
@@ -65,7 +107,10 @@
       ]
     },
     {
-      "title": "Junior Data Analyst", "company": "Henceforth Technologies", "dateRange": "Jun 2015 – Mar 2018", "location": "Hyderabad, India",
+      "title": "Junior Data Analyst",
+      "company": "Henceforth Technologies",
+      "dateRange": "Jun 2015 \u2013 Mar 2018",
+      "location": "Hyderabad, India",
       "bullets": [
         "Improved database query performance and data processing efficiency by 30% through storage optimization and query restructuring.",
         "Consolidated data from multiple source systems into BI tools (Tableau, Power BI), ensuring accuracy and consistency for business reporting.",
@@ -75,11 +120,11 @@
     }
   ],
   "education": [
-    "Master of Science, Information Technology Management – Concordia University, Saint Paul, MN",
-    "Bachelor of Technology, Mechanical Engineering (Minor: Computer Science) – Tirumala Engineering College, JNTU-K, India"
+    "Master of Science, Information Technology Management \u2013 Concordia University, Saint Paul, MN",
+    "Bachelor of Technology, Mechanical Engineering (Minor: Computer Science) \u2013 Tirumala Engineering College, JNTU-K, India"
   ],
   "certifications": [
-    "Machine Learning with R – IBM Cognitive Class (IBM, 2019)",
+    "Machine Learning with R \u2013 IBM Cognitive Class (IBM, 2019)",
     "Certified RPA Developer, Blue Prism Accredited Developer AD01 (Blue Prism, 2018)"
   ]
 }
