@@ -63,9 +63,10 @@
       "path": "",
       "description": "A food and cosmetics hazard-substance scanner: search any product to see additive analysis, sugar profile, and hazard alerts, backed by a shared community database.",
       "tags": [
-        "React",
-        "PWA",
-        "Product Safety"
+        "PostgreSQL",
+        "API Integration",
+        "Data Parsing",
+        "Ingredient/Additive Taxonomy"
       ],
       "year": "2026",
       "chart": "https://raw.githubusercontent.com/kiranmunugoti/hst-food-tracker/main/public/screenshot.png"
