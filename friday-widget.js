@@ -55,7 +55,7 @@
     ".fw-chips .fw-lead-chip{color:var(--accent);border-color:var(--accent)}",
     ".fw-in{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}",
     ".fw-lead{display:flex;flex-direction:column;gap:8px;padding:12px;background:var(--soft);border-radius:4px}",
-    ".fw-root input,.fw-root textarea{flex:1;min-width:0;padding:10px 12px;background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:3px;font:inherit;font-size:14px}",
+    ".fw-root input,.fw-root textarea{flex:1;min-width:0;padding:10px 12px;background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:3px;font:inherit;font-size:16px}",
     ".fw-root input:focus,.fw-root textarea:focus{outline:none;border-color:var(--ink)}",
     ".fw-btn{padding:10px 16px;background:var(--ink);color:var(--paper);border:none;border-radius:0;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:background .2s}",
     ".fw-btn:hover{background:var(--accent)}.fw-btn:disabled{opacity:.4;cursor:default}",
@@ -110,6 +110,27 @@
     form.onsubmit = function (e) { e.preventDefault(); send(input.value); };
 
     panel.appendChild(head); panel.appendChild(log); panel.appendChild(chips); panel.appendChild(form);
+
+    // Mobile keyboards shrink the visible viewport and can leave the page
+    // scrolled oddly once the keyboard closes. Keep the panel sized to what's
+    // actually visible (instead of a static 100vh), and restore the page's
+    // scroll position once the user is done typing.
+    var scrollYBeforeFocus = 0;
+    input.addEventListener("focus", function () {
+      scrollYBeforeFocus = window.scrollY;
+    });
+    input.addEventListener("blur", function () {
+      setTimeout(function () { window.scrollTo(0, scrollYBeforeFocus); }, 100);
+    });
+
+    if (window.visualViewport) {
+      var syncPanelHeight = function () {
+        var vh = window.visualViewport.height;
+        panel.style.maxHeight = Math.min(580, vh - 32) + "px";
+      };
+      window.visualViewport.addEventListener("resize", syncPanelHeight);
+      syncPanelHeight();
+    }
 
     var launch = el("button", { "class": "fw-launch", "aria-label": "Chat with Friday" }, CONFIG.launcherText);
     function toggle(open, focus) {
