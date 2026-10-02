@@ -1,0 +1,85 @@
+{
+  "name": "Sai Kiran Munugoti",
+  "contact": "kiranmunugotis@gmail.com | +1-612-212-2849 | linkedin.com/in/mr-kiran | Eagan, MN",
+  "summary": "Data Scientist with 7+ years of experience building predictive models, quantitative risk frameworks, and analytical pipelines across financial services, insurance, and operations. Core work spans multi-source data integration, machine learning model development and validation, and translating outputs into prioritization tools and dashboards for operational and executive decision-making. Experienced working in cross-functional environments where models must be explainable, traceable, and tied to measurable business outcomes.",
+  "technicalSkills": [
+    { "label": "Languages", "value": "Python (Pandas, NumPy, Scikit-learn, Matplotlib, Seaborn), R, SQL" },
+    { "label": "Machine Learning", "value": "Logistic Regression, Random Forest, XGBoost, Gradient Boosting, Survival Analysis, Bayesian Methods, K-Means Clustering, Neural Networks" },
+    { "label": "Risk & Analytics", "value": "Quantitative risk scoring, event likelihood/consequence modeling, anomaly detection, time-to-event modeling, scenario analysis" },
+    { "label": "Forecasting", "value": "ARIMA, Prophet, time-series modeling, feature engineering, hyperparameter tuning" },
+    { "label": "Data Engineering", "value": "ETL pipeline development, data quality validation, Azure Data Factory, AWS Redshift, Snowflake, SSIS, Talend, PySpark, PostgreSQL" },
+    { "label": "Visualization", "value": "Power BI, Tableau, Matplotlib, Seaborn, RShiny, QuickSight" },
+    { "label": "Geospatial", "value": "ArcGIS, GeoPandas, spatiotemporal analysis" },
+    { "label": "Cloud & MLOps", "value": "AWS SageMaker, Azure, Google Cloud, model validation, drift monitoring, Great Expectations" },
+    { "label": "Other", "value": "JIRA, Agile methodology, Blue Prism RPA, Salesforce, SAP, API Integration, Data Parsing" }
+  ],
+  "experience": [
+    {
+      "title": "Data Scientist", "company": "RB Management LLC", "dateRange": "Dec 2025 – Present", "location": "Remote, USA",
+      "bullets": [
+        "Designed multi-dimensional risk scoring models integrating operational, financial, and behavioral data from hotel PMS, POS, CRM, and booking platforms using Azure Data Factory and SQL.",
+        "Built anomaly detection and forecasting models to identify emerging risk patterns across a multi-property hotel portfolio, enabling proactive operational interventions.",
+        "Developed Power BI dashboards that ranked risk priorities and supported resource allocation decisions for Operations, Revenue Management, and Finance leadership.",
+        "Established data quality governance standards and validation controls across all data pipelines, improving downstream analytics reliability.",
+        "Partnered with cross-functional leadership to convert ambiguous operational challenges into structured analytical problem statements."
+      ]
+    },
+    {
+      "title": "Data Scientist", "company": "Cognitum Solutions LLC", "dateRange": "Apr 2025 – Dec 2025", "location": "Remote, USA",
+      "bullets": [
+        "Built time-series forecasting models using ARIMA and Prophet to support financial risk planning; improved forecast accuracy through iterative feature engineering and model calibration.",
+        "Conducted root-cause analysis on security incidents and produced visual risk summaries for executive review, including trend identification and anomaly flagging.",
+        "Developed ensemble ML strategies (stacking, blending) to improve model robustness on heterogeneous, incomplete datasets from multiple operational systems.",
+        "Supported design of risk mitigation control procedures and operational playbooks aligned with compliance requirements.",
+        "Delivered stakeholder training on dashboard interpretation, risk metric definitions, and data-driven workflow adoption."
+      ]
+    },
+    {
+      "title": "Data Scientist", "company": "Protek Talent Inc", "dateRange": "Feb 2024 – Apr 2025", "location": "Remote, USA",
+      "bullets": [
+        "Built customer churn prediction models using Logistic Regression and XGBoost, achieving 87% accuracy on noisy, multi-source operational data.",
+        "Automated ETL workflows for financial data ingestion, transformation, and validation, reducing pipeline processing time by 40% and improving risk analysis throughput.",
+        "Applied K-Means clustering and RFM analysis to segment customer risk profiles for targeted retention and mitigation strategies.",
+        "Resolved model overfitting through Grid Search and Random Search hyperparameter tuning, improving generalization performance by 20% on held-out test sets.",
+        "Debugged inconsistent model behavior by validating data schema changes using Pandas Profiling and automated pipeline checks with Great Expectations."
+      ]
+    },
+    {
+      "title": "Data Scientist", "company": "Genpact India Pvt. Ltd. (Cigna Healthcare)", "dateRange": "Jun 2021 – Aug 2022", "location": "Bengaluru, India",
+      "bullets": [
+        "Developed predictive models to identify high-risk insurance claims and potential fraud patterns, contributing to a 68% improvement in fraud detection rates and 30% reduction in associated operational costs.",
+        "Integrated multi-source healthcare data (claims, provider networks, member services) via SQL and Azure Data Factory, improving data quality and downstream analytics reliability for compliance reporting.",
+        "Applied statistical anomaly detection to flag inconsistent claims data; collaborated with actuaries and compliance teams on root-cause analysis and regulatory remediation.",
+        "Automated 70% of document-intensive data collection workflows using Blue Prism RPA integrated with NLP document processing.",
+        "Optimized insurance database schema design, increasing claims processing efficiency by 20%."
+      ]
+    },
+    {
+      "title": "Data Analyst", "company": "SequelSoft India Limited", "dateRange": "Apr 2018 – Jun 2021", "location": "Hyderabad, India",
+      "bullets": [
+        "Built ETL pipelines using Talend and AWS Redshift, improving data transformation accuracy and reporting reliability by 25% across financial and operational data domains.",
+        "Developed Power BI and Tableau dashboards to support business performance tracking across inventory, sales, and returns reporting.",
+        "Optimized complex SQL queries by analyzing execution plans and restructuring joins, subqueries, and indexes, achieving up to 50% reduction in query execution time.",
+        "Supported migration of on-premises databases to AWS and Google Cloud, ensuring security compliance and data integrity throughout transition.",
+        "Developed reconciliation scripts to identify staging-to-production data mismatches using checksums and join validation."
+      ]
+    },
+    {
+      "title": "Junior Data Analyst", "company": "Henceforth Technologies", "dateRange": "Jun 2015 – Mar 2018", "location": "Hyderabad, India",
+      "bullets": [
+        "Improved database query performance and data processing efficiency by 30% through storage optimization and query restructuring.",
+        "Consolidated data from multiple source systems into BI tools (Tableau, Power BI), ensuring accuracy and consistency for business reporting.",
+        "Developed SSIS packages for data import and export across Text, Excel, and CSV formats to SQL Server tables; implemented error handling and event-driven notifications.",
+        "Conducted data validation and cleansing to maintain integrity and compliance with security and governance policies."
+      ]
+    }
+  ],
+  "education": [
+    "Master of Science, Information Technology Management – Concordia University, Saint Paul, MN",
+    "Bachelor of Technology, Mechanical Engineering (Minor: Computer Science) – Tirumala Engineering College, JNTU-K, India"
+  ],
+  "certifications": [
+    "Machine Learning with R – IBM Cognitive Class (IBM, 2019)",
+    "Certified RPA Developer, Blue Prism Accredited Developer AD01 (Blue Prism, 2018)"
+  ]
+}
