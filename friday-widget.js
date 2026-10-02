@@ -116,6 +116,32 @@
     // actually visible (instead of a static 100vh), and restore the page's
     // scroll position once the user is done typing.
     var scrollYBeforeFocus = 0;
+
+    // Some iOS versions still zoom in on focus even with a 16px font-size.
+    // While any Friday input is focused, pin the viewport's max zoom to 1x;
+    // restore normal pinch-zoom for the rest of the site once typing is done.
+    var viewportMeta = document.querySelector('meta[name="viewport"]');
+    var baseViewportContent = viewportMeta ? viewportMeta.getAttribute("content") : null;
+    var zoomLockCount = 0;
+    function lockZoom() {
+      zoomLockCount++;
+      if (viewportMeta) viewportMeta.setAttribute("content", baseViewportContent + ",maximum-scale=1,user-scalable=no");
+    }
+    function unlockZoom() {
+      zoomLockCount = Math.max(0, zoomLockCount - 1);
+      if (zoomLockCount > 0 || !viewportMeta) return;
+      // Keep the lock on for a moment so the browser actually snaps back to
+      // 1x before we hand zoom control back to the page.
+      setTimeout(function () {
+        if (zoomLockCount === 0) viewportMeta.setAttribute("content", baseViewportContent);
+      }, 300);
+    }
+    function wireZoomLock(field) {
+      field.addEventListener("focus", lockZoom);
+      field.addEventListener("blur", unlockZoom);
+    }
+
+    wireZoomLock(input);
     input.addEventListener("focus", function () {
       scrollYBeforeFocus = window.scrollY;
     });
@@ -237,8 +263,9 @@
       var fields = [
         ["from_name", "Name"], ["from_email", "Email"], ["visitor_company", "Company"],
         ["visitor_role", "Role you're hiring for"]
-      ].map(function (d) { var i = el("input", { name: d[0], placeholder: d[1] }); f.appendChild(i); return i; });
+      ].map(function (d) { var i = el("input", { name: d[0], placeholder: d[1] }); wireZoomLock(i); f.appendChild(i); return i; });
       var msg = el("textarea", { name: "visitor_message", placeholder: "Message (optional)", rows: "2" });
+      wireZoomLock(msg);
       f.appendChild(msg);
       var err = el("p", { "class": "fw-err" });
       var btn = el("button", { type: "submit", "class": "fw-btn" }, "Send details");
