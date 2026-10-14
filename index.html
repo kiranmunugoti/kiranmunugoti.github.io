@@ -300,6 +300,23 @@
 
   <hr class="divider">
 
+  <!-- EDUCATION -->
+  <section id="education">
+    <div class="section-inner">
+      <p class="section-label reveal">Education</p>
+      <h2 class="reveal">Academic background</h2>
+      <div class="edu-list">
+        <div class="edu-item" ng-repeat="e in education track by $index">
+          <div class="edu-degree">{{ e.degree }}</div>
+          <div class="edu-school">{{ e.school }}</div>
+          <div class="edu-meta" ng-if="e.status">{{ e.status }}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+    
   <!-- CONTACT -->
   <section id="contact">
     <div class="section-inner">
@@ -775,6 +792,7 @@ c){var e=a|0,f=c;void 0===f&&(f=Math.min(b(a),3));Math.pow(10,f);return 1==e&&0=
       { id: 'about',    label: 'About',    href: '#about'    },
       { id: 'projects', label: 'Projects', href: '#projects' },
       { id: 'skills',   label: 'Skills',   href: '#skills'   },
+      { id: 'education', label: 'Education', href: '#education' },
       { id: 'contact',  label: 'Contact',  href: '#contact'  }
     ];
     $scope.currentYear   = new Date().getFullYear();
@@ -786,6 +804,12 @@ c){var e=a|0,f=c;void 0===f&&(f=Math.min(b(a),3));Math.pow(10,f);return 1==e&&0=
       { value: '6',     label: 'Roles held'  },
       { value: '4',     label: 'Industries'         },
       { value: 'M.Sc.', label: 'IT & Management'    }
+    ];
+
+    $scope.education = [
+      { degree: 'Ph.D., Artificial Intelligence', school: 'University of Cumberlands', status: 'In progress' },
+      { degree: 'M.S., Computer Science and Information Technology Management', school: 'Concordia University, Saint Paul, MN', status: 'Graduated' },
+      { degree: 'B.Tech, Mechanical Engineering (Minor: Computer Science)', school: 'Tirumala Engineering College, JNTU-K, India', status: 'Graduated' }
     ];
 
     $scope.projects = [];
@@ -879,7 +903,7 @@ c){var e=a|0,f=c;void 0===f&&(f=Math.min(b(a),3));Math.pow(10,f);return 1==e&&0=
     };
 
     /* Scroll: active nav + scroll-to-top */
-    var sectionIds = ['contact','skills','projects','about'];
+    var sectionIds = ['contact','education','skills','projects','about'];
     var scrollBtn  = document.getElementById('scrollTopBtn');
     window.addEventListener('scroll', function () {
       var y = window.pageYOffset;
