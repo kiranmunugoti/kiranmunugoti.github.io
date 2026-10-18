@@ -1,0 +1,80 @@
+{
+  "username": "kiranmunugoti",
+  "repositories": [
+    {
+      "name": "Multi-Dimensional Risk Scoring",
+      "repo": "Work-and-portfolio",
+      "path": "01-risk-scoring",
+      "description": "Risk scoring models integrating operational, financial, and behavioral data from PMS, POS, CRM, and booking platforms across a multi-property hospitality portfolio, paired with Power BI dashboards for leadership prioritization.",
+      "tags": [
+        "Python",
+        "Azure Data Factory",
+        "Anomaly Detection",
+        "Power BI"
+      ],
+      "year": "2025",
+      "chart": "https://raw.githubusercontent.com/kiranmunugoti/Work-and-portfolio/main/01-risk-scoring/risk_scores_chart.png",
+      "addToResumeProjects": false
+    },
+    {
+      "name": "Financial Risk Forecasting Pipeline",
+      "repo": "Work-and-portfolio",
+      "path": "02-financial-forecasting",
+      "description": "Time-series forecasting with ARIMA and Prophet to support financial risk planning, plus ensemble ML (stacking, blending) to improve robustness on heterogeneous, incomplete operational data.",
+      "tags": [
+        "ARIMA",
+        "Prophet",
+        "Time Series",
+        "Ensemble ML"
+      ],
+      "year": "2025",
+      "chart": "https://raw.githubusercontent.com/kiranmunugoti/Work-and-portfolio/main/02-financial-forecasting/forecast_chart.png",
+      "addToResumeProjects": false
+    },
+    {
+      "name": "Churn Prediction & Risk Segmentation",
+      "repo": "Work-and-portfolio",
+      "path": "03-churn-segmentation",
+      "description": "Customer churn models using Logistic Regression and XGBoost reaching 87% accuracy on noisy, multi-source data, with K-Means/RFM segmentation to target retention and mitigation strategies.",
+      "tags": [
+        "Logistic Regression",
+        "XGBoost",
+        "K-Means",
+        "ETL"
+      ],
+      "year": "2024",
+      "chart": "https://raw.githubusercontent.com/kiranmunugoti/Work-and-portfolio/main/03-churn-segmentation/churn_model_chart.png",
+      "addToResumeProjects": false
+    },
+    {
+      "name": "Healthcare Claims Fraud Detection",
+      "repo": "Work-and-portfolio",
+      "path": "04-fraud-detection",
+      "description": "Predictive models to flag high-risk insurance claims and fraud patterns for Cigna Healthcare, contributing to a 68% improvement in fraud detection and a 30% reduction in operational costs.",
+      "tags": [
+        "XGBoost",
+        "SQL",
+        "Fraud Detection",
+        "Healthcare"
+      ],
+      "year": "2022",
+      "chart": "https://raw.githubusercontent.com/kiranmunugoti/Work-and-portfolio/main/04-fraud-detection/fraud_model_chart.png",
+      "addToResumeProjects": false
+    },
+    {
+      "name": "HST Ingredient Tracker",
+      "repo": "hst-food-tracker",
+      "path": "",
+      "description": "A food and cosmetics hazard-substance scanner: search any product to see additive analysis, sugar profile, and hazard alerts, backed by a shared community database.",
+      "tags": [
+        "PostgreSQL",
+        "API Integration",
+        "Data Parsing",
+        "Ingredient/Additive Taxonomy"
+      ],
+      "year": "2026",
+      "chart": "https://raw.githubusercontent.com/kiranmunugoti/hst-food-tracker/main/public/screenshot.png",
+      "addToResumeProjects": true
+    }
+  ]
+}
